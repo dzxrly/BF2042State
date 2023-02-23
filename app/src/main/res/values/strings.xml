@@ -4,4 +4,6 @@
     <string name="login_label_platform">游戏平台</string>
     <string name="login_logo_slogan">战绩查询助手</string>
     <string name="login_label_search_btn">查询</string>
+    <string name="login_label_about">关于</string>
+    <string name="login_label_update">检查更新</string>
 </resources>
