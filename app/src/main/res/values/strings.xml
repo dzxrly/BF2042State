@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BF2042State</string>
+    <string name="login_label_username">用户名</string>
+    <string name="login_label_platform">游戏平台</string>
+    <string name="login_logo_slogan">战绩查询助手</string>
+    <string name="login_label_search_btn">查询</string>
+</resources>
