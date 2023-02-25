@@ -17,10 +17,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eggtargaryen.bf2042state.R
+import com.eggtargaryen.bf2042state.api.getPlayerState
+import com.eggtargaryen.bf2042state.component.CustomSnackBar
 import com.eggtargaryen.bf2042state.component.RoundOutlineTextField
+import com.eggtargaryen.bf2042state.component.SnackBarType
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Response
+import okio.IOException
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun LoginPage(
@@ -30,6 +41,9 @@ fun LoginPage(
         listOf("PC", "Xbox One", "Xbox Series", "PlayStation 4", "PlayStation 5")
     val platformValOptions = listOf("pc", "xboxone", "xboxseries", "ps4", "ps5")
     val scope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+    val internetPermissionState =
+        rememberPermissionState(permission = android.Manifest.permission.INTERNET)
 
     var username by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
@@ -37,11 +51,27 @@ fun LoginPage(
     var selectedPlatform by remember { mutableStateOf(platformValOptions[0]) }
 
     Scaffold(
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            SnackbarHost(it) { data ->
+                CustomSnackBar(snackBarType = SnackBarType.ERROR, data.message)
+            }
+        },
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background),
         content = { innerPadding ->
             Surface(modifier = Modifier.padding(innerPadding)) {
+                SideEffect {
+                    if (!internetPermissionState.status.isGranted) {
+                        scope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = "需要网络权限！"
+                            )
+                        }
+                        internetPermissionState.launchPermissionRequest()
+                    }
+                }
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -129,8 +159,34 @@ fun LoginPage(
                         onClick = {
                             // Check if username and platform is empty
                             if (username.isNotEmpty() && selectedPlatform.isNotEmpty()) {
-                                onNavToState()
-                            } else scope.launch { }
+                                getPlayerState(
+                                    username,
+                                    selectedPlatform,
+//                                    onSuccess = { response ->
+//                                        println(response)
+//                                        onNavToState()
+//                                    },
+//                                    onFail = { _ ->
+//                                        scope.launch {
+//                                            scaffoldState.snackbarHostState.showSnackbar(
+//                                                "获取用户信息失败！"
+//                                            )
+//                                        }
+//                                    }
+                                ).enqueue(object: Callback {
+                                    override fun onResponse(call: Call, response: Response) {
+                                        println(response.body?.string())
+                                    }
+
+                                    override fun onFailure(call: Call, e: IOException) {
+                                        println(e)
+                                    }
+                                })
+                            } else scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    "用户名或平台不能为空！"
+                                )
+                            }
                         },
                         shape = RoundedCornerShape(50),
                         modifier = Modifier.fillMaxWidth(),

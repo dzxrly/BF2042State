@@ -12,8 +12,11 @@ import androidx.compose.ui.text.style.TextAlign
 @Composable
 fun loginPageAbout(): @Composable() (ColumnScope.() -> Unit) {
     return {
-        Column (
-            modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colors.onSecondary),
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.4f)
+                .background(color = MaterialTheme.colors.onSecondary),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
