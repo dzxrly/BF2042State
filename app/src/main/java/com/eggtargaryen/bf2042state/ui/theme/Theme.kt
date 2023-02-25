@@ -17,6 +17,9 @@ private val DarkColorPalette = darkColors(
     onBackground = md_theme_dark_onBackground,
     surface = md_theme_dark_surface,
     onSurface = md_theme_dark_onSurface,
+
+    primaryVariant = md_theme_dark_tertiary,  // as Tertiary
+    secondaryVariant = md_theme_dark_onTertiary,  // as Tertiary
 )
 
 private val LightColorPalette = lightColors(
@@ -40,6 +43,9 @@ private val LightColorPalette = lightColors(
     onBackground = md_theme_dark_onBackground,
     surface = md_theme_dark_surface,
     onSurface = md_theme_dark_onSurface,
+
+    primaryVariant = md_theme_dark_tertiary,  // as Tertiary
+    secondaryVariant = md_theme_dark_onTertiary,  // as Tertiary
 )
 
 @Composable
