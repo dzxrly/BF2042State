@@ -52,23 +52,4 @@ class RequestBuilder : Callback {
             else -> Request.Builder().url(urlBuilder(urls)).build()
         })
     }
-
-//    fun request() = OkHttpClient.Builder().run {
-//        connectTimeout(timeout, TimeUnit.MILLISECONDS)
-//        readTimeout(timeout, TimeUnit.MILLISECONDS)
-//        retryOnConnectionFailure(true)
-//        build().newCall(
-//            when (method) {
-//                "post", "Post", "POST" -> Request.Builder().url(urlBuilder(urls)).post(body!!)
-//                    .build()
-//                else -> Request.Builder().url(urlBuilder(urls)).build()
-//            }
-//        )
-//    }.enqueue(this)
-}
-
-fun http(init: RequestBuilder.() -> Unit) {
-    val wrap = RequestBuilder()
-    wrap.init()
-    wrap.request()
 }

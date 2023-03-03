@@ -1,5 +1,6 @@
 package com.eggtargaryen.bf2042state.page
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,9 +22,12 @@ import com.eggtargaryen.bf2042state.api.getPlayerState
 import com.eggtargaryen.bf2042state.component.CustomSnackBar
 import com.eggtargaryen.bf2042state.component.RoundOutlineTextField
 import com.eggtargaryen.bf2042state.component.SnackBarType
+import com.eggtargaryen.bf2042state.model.PlayerInfo
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
@@ -49,6 +53,7 @@ fun LoginPage(
     var expanded by remember { mutableStateOf(false) }
     var selectedPlatformText by remember { mutableStateOf("") }
     var selectedPlatform by remember { mutableStateOf(platformValOptions[0]) }
+    var loadingState by remember { mutableStateOf(false) }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -101,7 +106,7 @@ fun LoginPage(
                                 .background(color = MaterialTheme.colors.primary)
                         )
                     }
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                     ExposedDropdownMenuBox(
                         expanded = expanded,
                         onExpandedChange = { expanded = !expanded },
@@ -157,52 +162,92 @@ fun LoginPage(
                     Spacer(modifier = Modifier.height(12.dp))
                     Button(
                         onClick = {
+                            loadingState = true
                             // Check if username and platform is empty
                             if (username.isNotEmpty() && selectedPlatform.isNotEmpty()) {
                                 getPlayerState(
                                     username,
                                     selectedPlatform,
-//                                    onSuccess = { response ->
-//                                        println(response)
-//                                        onNavToState()
-//                                    },
-//                                    onFail = { _ ->
-//                                        scope.launch {
-//                                            scaffoldState.snackbarHostState.showSnackbar(
-//                                                "获取用户信息失败！"
-//                                            )
-//                                        }
-//                                    }
-                                ).enqueue(object: Callback {
+                                ).enqueue(object : Callback {
                                     override fun onResponse(call: Call, response: Response) {
-                                        println(response.body?.string())
+                                        val playerInfo = response.body?.string()
+                                        if (playerInfo != null) {
+                                            // moshi
+                                            val moshi = Moshi.Builder()
+                                                .add(KotlinJsonAdapterFactory())
+                                                .build()
+                                            val playerInfoAdapter =
+                                                moshi.adapter(PlayerInfo::class.java)
+                                            val playerInfoJson =
+                                                playerInfoAdapter.fromJson(playerInfo)
+                                            println(playerInfoJson)
+
+                                            loadingState = false
+                                        } else {
+                                            scope.launch {
+                                                scaffoldState.snackbarHostState.showSnackbar(
+                                                    "未找到该用户！"
+                                                )
+                                            }
+
+                                            loadingState = false
+                                        }
                                     }
 
                                     override fun onFailure(call: Call, e: IOException) {
                                         println(e)
+                                        loadingState = false
                                     }
                                 })
-                            } else scope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    "用户名或平台不能为空！"
-                                )
+                            } else {
+                                scope.launch {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        "用户名或平台不能为空！"
+                                    )
+                                }
+                                loadingState = false
                             }
                         },
                         shape = RoundedCornerShape(50),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = MaterialTheme.colors.primary,
-                            contentColor = MaterialTheme.colors.background
-                        )
+                            contentColor = MaterialTheme.colors.background,
+                            disabledBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.32f)
+                        ),
+                        enabled = !loadingState
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.round_manage_search_24),
-                            contentDescription = stringResource(id = R.string.login_label_search_btn),
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = stringResource(id = R.string.login_label_search_btn),
-                        )
+                        Crossfade(targetState = loadingState) { loading ->
+                            when (loading) {
+                                true -> Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(24.dp),
+                                        color = MaterialTheme.colors.primary,
+                                        strokeWidth = 3.dp,
+                                    )
+                                }
+                                false -> Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.round_manage_search_24),
+                                        contentDescription = stringResource(id = R.string.login_label_search_btn),
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = stringResource(id = R.string.login_label_search_btn),
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
