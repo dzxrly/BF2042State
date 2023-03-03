@@ -23,6 +23,7 @@ import com.eggtargaryen.bf2042state.component.CustomSnackBar
 import com.eggtargaryen.bf2042state.component.RoundOutlineTextField
 import com.eggtargaryen.bf2042state.component.SnackBarType
 import com.eggtargaryen.bf2042state.model.PlayerInfo
+import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -39,7 +40,8 @@ import okio.IOException
 @ExperimentalMaterialApi
 @Composable
 fun LoginPage(
-    onNavToState: () -> Unit = {}
+    onNavToState: () -> Unit = {},
+    playerInfoViewModel: PlayerInfoViewModel
 ) {
     val platformLabelOptions =
         listOf("PC", "Xbox One", "Xbox Series", "PlayStation 4", "PlayStation 5")
@@ -173,29 +175,42 @@ fun LoginPage(
                                         val playerInfo = response.body?.string()
                                         if (playerInfo != null) {
                                             // moshi
-                                            val moshi = Moshi.Builder()
-                                                .add(KotlinJsonAdapterFactory())
-                                                .build()
-                                            val playerInfoAdapter =
-                                                moshi.adapter(PlayerInfo::class.java)
-                                            val playerInfoJson =
-                                                playerInfoAdapter.fromJson(playerInfo)
-                                            println(playerInfoJson)
-
-                                            loadingState = false
+                                            try {
+                                                val moshi = Moshi.Builder()
+                                                    .add(KotlinJsonAdapterFactory())
+                                                    .build()
+                                                val playerInfoAdapter =
+                                                    moshi.adapter(PlayerInfo::class.java)
+                                                val playerInfoJson =
+                                                    playerInfoAdapter.fromJson(playerInfo)
+                                                playerInfoViewModel.postPlayerInfo(
+                                                    playerInfoJson!!
+                                                )
+                                                scope.launch { onNavToState() }
+                                            } catch (e: Exception) {
+                                                println(e)
+                                                scope.launch {
+                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                        "用户信息错误！$e"
+                                                    )
+                                                }
+                                            }
                                         } else {
                                             scope.launch {
                                                 scaffoldState.snackbarHostState.showSnackbar(
                                                     "未找到该用户！"
                                                 )
                                             }
-
-                                            loadingState = false
                                         }
+                                        loadingState = false
                                     }
 
                                     override fun onFailure(call: Call, e: IOException) {
-                                        println(e)
+                                        scope.launch {
+                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                "网络连接异常，请重试。"
+                                            )
+                                        }
                                         loadingState = false
                                     }
                                 })

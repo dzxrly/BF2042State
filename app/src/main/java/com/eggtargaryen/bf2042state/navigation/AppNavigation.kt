@@ -7,6 +7,8 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.page.LoginPage
 import com.eggtargaryen.bf2042state.page.StatePage
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -28,6 +30,8 @@ fun AppNavigation(
     easing: Easing = FastOutSlowInEasing
 ) {
     val navController = rememberAnimatedNavController()
+    // PlayerInfoViewModel is a ViewModel that stores the player info
+    val playerInfoViewModel = viewModel<PlayerInfoViewModel>()
     AnimatedNavHost(
         navController = navController,
         startDestination = startDestination,
@@ -60,11 +64,14 @@ fun AppNavigation(
             LoginPage(
                 onNavToState = {
                     navController.navigate(Destinations.STATE)
-                }
+                },
+                playerInfoViewModel = playerInfoViewModel
             )
         }
         composable(Destinations.STATE) {
-            StatePage()
+            StatePage(
+//                playerInfoViewModel = playerInfoViewModel
+            )
         }
     }
 }
