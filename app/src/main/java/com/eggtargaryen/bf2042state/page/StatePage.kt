@@ -108,7 +108,7 @@ fun PlayerBaseInfoCard(
             ) {
                 AsyncImage(
                     modifier = Modifier
-                        .size(128.dp),
+                        .size(96.dp),
                     model = ImageRequest.Builder(LocalContext.current)
                         .data("#")
                         .crossfade(true)

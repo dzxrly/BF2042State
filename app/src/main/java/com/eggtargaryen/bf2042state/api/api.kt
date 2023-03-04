@@ -15,3 +15,15 @@ fun getPlayerState(
     baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
     return baseApi.request()
 }
+
+
+// BFBan 状态查询
+// status=0: 未处理
+// status=1: 石锤
+// status=2: 待自证
+// status=3: MOSS自证
+// status=4: 无效举报
+// status=5: 讨论中
+// status=6: 需要更多管理投票
+// status=7:
+// status=8: 刷枪
