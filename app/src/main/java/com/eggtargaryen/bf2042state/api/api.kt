@@ -10,7 +10,8 @@ fun getPlayerState(
     skipBattleLog: String = "false",
 ): Call {
     val baseApi = RequestBuilder()
-    baseApi.urls = "/bf2042/stats/?raw=$raw&format_values=$formatValue&name=$playerName&platform=$platform&skip_battlelog=$skipBattleLog"
+    baseApi.urls =
+        "/bf2042/stats/?raw=$raw&format_values=$formatValue&name=$playerName&platform=$platform&skip_battlelog=$skipBattleLog"
     baseApi.method = "GET"
     baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
     return baseApi.request()
@@ -27,3 +28,12 @@ fun getPlayerState(
 // status=6: 需要更多管理投票
 // status=7:
 // status=8: 刷枪
+fun getPlayerBFBanStatus(
+    playerName: String
+): Call {
+    val baseApi = RequestBuilder()
+    baseApi.urls = "/bfban/checkban?names=$playerName"
+    baseApi.method = "GET"
+    baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
+    return baseApi.request()
+}

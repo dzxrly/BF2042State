@@ -7,4 +7,12 @@
     <string name="login_label_about">关于</string>
     <string name="login_label_update">检查更新</string>
     <string name="login_snackbar_empty_error">用户名或平台不能为空！</string>
+    <string name="state_back">返回</string>
+    <string name="state_tab_foot">步战</string>
+    <string name="state_tab_tank">坦克</string>
+    <string name="state_tab_plane">飞机</string>
+    <string name="state_tab_weapon">武器</string>
+    <string name="state_tab_gadget">装备</string>
+    <string name="state_tab_map">地图</string>
+    <string name="state_tab_mode">模式</string>
 </resources>

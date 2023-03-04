@@ -8,6 +8,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.eggtargaryen.bf2042state.navigation.AppNavigation
+import com.eggtargaryen.bf2042state.navigation.Destinations
 import com.eggtargaryen.bf2042state.page.StatePage
 import com.eggtargaryen.bf2042state.ui.theme.BF2042StateTheme
 
@@ -20,7 +21,9 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             BF2042StateTheme {
-                AppNavigation()
+                AppNavigation(
+                    startDestination = Destinations.STATE
+                )
             }
         }
     }
