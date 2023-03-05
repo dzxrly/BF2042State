@@ -4,25 +4,34 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.eggtargaryen.bf2042state.navigation.AppNavigation
 import com.eggtargaryen.bf2042state.navigation.Destinations
-import com.eggtargaryen.bf2042state.page.StatePage
 import com.eggtargaryen.bf2042state.ui.theme.BF2042StateTheme
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-        }
         setContent {
             BF2042StateTheme {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.setDecorFitsSystemWindows(false)
+                } else {
+                    val systemUiController = rememberSystemUiController()
+                    val useDarkIcons = !isSystemInDarkTheme()
+                    systemUiController.setSystemBarsColor(
+                        Color.Transparent,
+                        darkIcons = useDarkIcons
+                    )
+                }
                 AppNavigation(
-                    startDestination = Destinations.STATE
+                    startDestination = Destinations.LOGIN
                 )
             }
         }
@@ -34,6 +43,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     BF2042StateTheme {
-        StatePage()
+//        StatePage()
     }
 }

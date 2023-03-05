@@ -70,7 +70,10 @@ fun AppNavigation(
         }
         composable(Destinations.STATE) {
             StatePage(
-//                playerInfoViewModel = playerInfoViewModel
+                onNavToLogin = {
+                    navController.navigate(Destinations.LOGIN)
+                },
+                playerInfoViewModel = playerInfoViewModel
             )
         }
     }

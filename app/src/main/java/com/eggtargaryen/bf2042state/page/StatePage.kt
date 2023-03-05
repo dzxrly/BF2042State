@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalPagerApi::class)
+
 package com.eggtargaryen.bf2042state.page
 
 import androidx.compose.animation.AnimatedVisibility
@@ -9,29 +11,37 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.eggtargaryen.bf2042state.R
-import com.eggtargaryen.bf2042state.component.BaseDataBadge
+import com.eggtargaryen.bf2042state.component.*
+import com.eggtargaryen.bf2042state.model.PlayerInfo
+import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.pagerTabIndicatorOffset
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 
 @Composable
 fun StatePage(
-//    playerInfoViewModel: PlayerInfoViewModel
+    onNavToLogin: () -> Unit = {},
+    playerInfoViewModel: PlayerInfoViewModel
 ) {
-//    val playerInfo = playerInfoViewModel.getPlayerInfo()
+    val playerInfo = playerInfoViewModel.getPlayerInfo()
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val verticalScrollState = rememberScrollState()
@@ -59,7 +69,7 @@ fun StatePage(
                                     .size(32.dp)
                                     .clip(CircleShape),
                                 model = ImageRequest.Builder(LocalContext.current)
-                                    .data("#")
+                                    .data(playerInfo?.avatar ?: "#")
                                     .crossfade(true)
                                     .build(),
                                 contentDescription = "User Avatar",
@@ -67,12 +77,12 @@ fun StatePage(
                                 contentScale = ContentScale.Crop,
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "Player Name", maxLines = 1)
+                            Text(text = playerInfo?.userName ?: "Unknown", maxLines = 1)
                         }
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { onNavToLogin() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.round_arrow_back_ios_new_24),
                             contentDescription = "Back"
@@ -96,8 +106,12 @@ fun StatePage(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    PlayerBaseInfoCard()
-                    PlayerBaseDataCard()
+                    if (playerInfo != null) {
+                        PlayerBaseInfoCard(playerInfo)
+                    }
+                    if (playerInfo != null) {
+                        PlayerBaseDataCard(playerInfo)
+                    }
                     DataDetailCard()
                 }
             }
@@ -108,7 +122,7 @@ fun StatePage(
 
 @Composable
 fun PlayerBaseInfoCard(
-//    playerInfo: PlayerInfo
+    playerInfo: PlayerInfo
 ) {
     Card(
         modifier = Modifier
@@ -136,7 +150,7 @@ fun PlayerBaseInfoCard(
                         .size(96.dp)
                         .clip(CircleShape),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data("#")
+                        .data(playerInfo.avatar)
                         .crossfade(true)
                         .build(),
                     contentDescription = "User Avatar",
@@ -151,27 +165,27 @@ fun PlayerBaseInfoCard(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "Xx__Koraidon__xX",
+                        text = playerInfo.userName,
                         style = MaterialTheme.typography.h6,
                         maxLines = 1
                     )
+//                    Spacer(modifier = Modifier.height(2.dp))
+//                    Text(
+//                        text = "等级 Lv.$playerInfo.",
+//                        style = MaterialTheme.typography.body1,
+//                        color = MaterialTheme.colors.secondary,
+//                        maxLines = 1
+//                    )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "等级 Lv.350",
+                        text = "游戏内时长 ${secondsToHours(playerInfo.secondsPlayed)}小时",
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.secondary,
                         maxLines = 1
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "游戏内时长 ${secondsToHours(1882410)}小时",
-                        style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.secondary,
-                        maxLines = 1
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = "最佳专家 Mackey",
+                        text = "最佳专家 ${playerInfo.bestClass}",
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.secondary,
                         maxLines = 1
@@ -186,7 +200,9 @@ fun PlayerBaseInfoCard(
 
 
 @Composable
-fun PlayerBaseDataCard() {
+fun PlayerBaseDataCard(
+    playerInfo: PlayerInfo
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -210,16 +226,46 @@ fun PlayerBaseDataCard() {
                 mainAxisSpacing = 12.dp,
                 crossAxisSpacing = 12.dp,
             ) {
-                BaseDataBadge(label = "K/D", data = "4.5")
-                BaseDataBadge(label = "KPM", data = "1.5")
-                BaseDataBadge(label = "DPM", data = "200.0")
-                BaseDataBadge(label = "胜率", data = "83.83%")
-                BaseDataBadge(label = "爆头率", data = "22.22%")
-                BaseDataBadge(label = "准确度", data = "22.22%")
-                BaseDataBadge(label = "击杀数", data = "50000")
-                BaseDataBadge(label = "场均伤害", data = "5700.90")
-                BaseDataBadge(label = "场均击杀", data = "43.43")
-                BaseDataBadge(label = "游玩场数", data = "4343")
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_kd),
+                    data = playerInfo.infantryKillDeath.toString()
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_kpm),
+                    data = playerInfo.killsPerMinute.toString()
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_dpm),
+                    data = playerInfo.damagePerMinute.toString()
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_win_rate),
+                    data = playerInfo.winPercent
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_hs_rate),
+                    data = playerInfo.headshots
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_acc),
+                    data = playerInfo.accuracy
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_kills),
+                    data = playerInfo.kills.toString()
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_dpM),
+                    data = playerInfo.damagePerMatch.toString()
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_kpM),
+                    data = playerInfo.killsPerMatch.toString()
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_M),
+                    data = playerInfo.matchesPlayed.toString()
+                )
             }
         }
     }
@@ -227,7 +273,20 @@ fun PlayerBaseDataCard() {
 
 
 @Composable
-fun DataDetailCard() {
+fun DataDetailCard(
+    initPageIndex: Int = 1
+) {
+    val pagerState = rememberPagerState(initPageIndex)
+    val coroutineScope = rememberCoroutineScope()
+
+    val detailDataTabContentList = listOf(
+        stringResource(id = R.string.state_tab_foot),
+        stringResource(id = R.string.state_tab_weapon),
+        stringResource(id = R.string.state_tab_tank),
+        stringResource(id = R.string.state_tab_plane),
+        stringResource(id = R.string.state_tab_gadget)
+    )
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -235,5 +294,48 @@ fun DataDetailCard() {
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.primary,
         elevation = 4.dp
-    ) {}
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ScrollableTabRow(
+                modifier = Modifier.fillMaxWidth(),
+                selectedTabIndex = pagerState.currentPage,
+                indicator = { tabPositions ->
+                    TabRowDefaults.Indicator(
+                        Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                    )
+                },
+                backgroundColor = MaterialTheme.colors.background,
+                contentColor = MaterialTheme.colors.primary,
+                divider = { },
+            ) {
+                detailDataTabContentList.forEachIndexed { index, title ->
+                    Tab(
+                        text = { Text(text = title) },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        }
+                    )
+                }
+            }
+            HorizontalPager(
+                count = detailDataTabContentList.size,
+                state = pagerState,
+            ) { page ->
+                when (page) {
+                    0 -> DetailDataOnFoot()
+                    1 -> DetailDataOnWeapon()
+                    2 -> DetailDataOnTank()
+                    3 -> DetailDataOnPlane()
+                    4 -> DetailDataOnGadget()
+                }
+            }
+        }
+    }
 }
