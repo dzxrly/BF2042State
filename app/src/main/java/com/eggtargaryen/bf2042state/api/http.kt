@@ -8,14 +8,14 @@ object BF2042StateBaseApi {
     val devMode = false
     val baseApi = "https://api.gametools.network"
     val baseDevApi = "http://127.0.0.1:4523/m1/2353382-0-default"
-    val timeout = 3000
+    val timeout = 30000  // 30s
 }
 
 class RequestBuilder : Callback {
     var urls: String = ""
     var method: String = "GET"
     var body: RequestBody? = null
-    var timeout: Long = 3000
+    var timeout: Long = 30000
     var success: ((Response) -> Unit)? = null
     var faild: ((Throwable) -> Unit)? = null
 

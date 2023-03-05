@@ -26,6 +26,7 @@
     <string name="state_base_data_card_dpM">场均伤害</string>
     <string name="state_base_data_card_kpM">场均击杀</string>
     <string name="state_base_data_card_M">游玩场数</string>
+    <string name="state_base_data_best_class">最佳专家</string>
 
     <string name="state_detail_data_on_foot_kills">击杀数量</string>
     <string name="state_detail_data_on_foot_death">死亡次数</string>
@@ -36,6 +37,7 @@
     <string name="state_detail_data_on_foot_hs">爆头次数</string>
     <string name="state_detail_data_on_foot_dmg">伤害总量</string>
     <string name="state_detail_data_on_foot_fire">开火次数</string>
+    <string name="state_detail_data_on_foot_hit">命中次数</string>
     <string name="state_detail_data_on_foot_vehicle_destroy">摧毁载具</string>
     <string name="state_detail_data_on_foot_enemies_spot">索敌次数</string>
     <string name="state_detail_data_on_foot_revives">急救次数</string>

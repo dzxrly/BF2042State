@@ -24,7 +24,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.*
-import com.eggtargaryen.bf2042state.model.PlayerInfo
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
@@ -106,13 +105,9 @@ fun StatePage(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (playerInfo != null) {
-                        PlayerBaseInfoCard(playerInfo)
-                    }
-                    if (playerInfo != null) {
-                        PlayerBaseDataCard(playerInfo)
-                    }
-                    DataDetailCard()
+                    PlayerBaseInfoCard(playerInfoViewModel)
+                    PlayerBaseDataCard(playerInfoViewModel)
+                    DataDetailCard(playerInfoViewModel)
                 }
             }
         }
@@ -122,8 +117,9 @@ fun StatePage(
 
 @Composable
 fun PlayerBaseInfoCard(
-    playerInfo: PlayerInfo
+    playerInfoViewModel: PlayerInfoViewModel
 ) {
+    val playerInfo = playerInfoViewModel.getPlayerInfo()
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -150,7 +146,7 @@ fun PlayerBaseInfoCard(
                         .size(96.dp)
                         .clip(CircleShape),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(playerInfo.avatar)
+                        .data(playerInfo?.avatar ?: "#")
                         .crossfade(true)
                         .build(),
                     contentDescription = "User Avatar",
@@ -165,7 +161,7 @@ fun PlayerBaseInfoCard(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = playerInfo.userName,
+                        text = playerInfo?.userName ?: "Unknown",
                         style = MaterialTheme.typography.h6,
                         maxLines = 1
                     )
@@ -178,14 +174,7 @@ fun PlayerBaseInfoCard(
 //                    )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "游戏内时长 ${secondsToHours(playerInfo.secondsPlayed)}小时",
-                        style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.secondary,
-                        maxLines = 1
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = "最佳专家 ${playerInfo.bestClass}",
+                        text = "${secondsToHours(playerInfo?.secondsPlayed ?: -1)}小时",
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.secondary,
                         maxLines = 1
@@ -201,8 +190,9 @@ fun PlayerBaseInfoCard(
 
 @Composable
 fun PlayerBaseDataCard(
-    playerInfo: PlayerInfo
+    playerInfoViewModel: PlayerInfoViewModel
 ) {
+    val playerInfo = playerInfoViewModel.getPlayerInfo()
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -228,43 +218,47 @@ fun PlayerBaseDataCard(
             ) {
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kd),
-                    data = playerInfo.infantryKillDeath.toString()
+                    data = playerInfo?.infantryKillDeath.toString() ?: "0.0"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kpm),
-                    data = playerInfo.killsPerMinute.toString()
+                    data = playerInfo?.killsPerMinute.toString() ?: "0.0"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_dpm),
-                    data = playerInfo.damagePerMinute.toString()
+                    data = playerInfo?.damagePerMinute.toString() ?: "0.0"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_win_rate),
-                    data = playerInfo.winPercent
+                    data = playerInfo?.winPercent ?: "0.0%"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_hs_rate),
-                    data = playerInfo.headshots
+                    data = playerInfo?.headshots ?: "0.0%"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_acc),
-                    data = playerInfo.accuracy
+                    data = playerInfo?.accuracy ?: "0.0%"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kills),
-                    data = playerInfo.kills.toString()
+                    data = playerInfo?.kills.toString() ?: "0"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_dpM),
-                    data = playerInfo.damagePerMatch.toString()
+                    data = playerInfo?.damagePerMatch.toString() ?: "0.0"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kpM),
-                    data = playerInfo.killsPerMatch.toString()
+                    data = playerInfo?.killsPerMatch.toString() ?: "0.0"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_M),
-                    data = playerInfo.matchesPlayed.toString()
+                    data = playerInfo?.matchesPlayed.toString() ?: "0"
+                )
+                BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_best_class),
+                    data = playerInfo?.bestClass ?: "Unknown"
                 )
             }
         }
@@ -274,7 +268,8 @@ fun PlayerBaseDataCard(
 
 @Composable
 fun DataDetailCard(
-    initPageIndex: Int = 1
+    playerInfoViewModel: PlayerInfoViewModel,
+    initPageIndex: Int = 0
 ) {
     val pagerState = rememberPagerState(initPageIndex)
     val coroutineScope = rememberCoroutineScope()
@@ -325,15 +320,17 @@ fun DataDetailCard(
                 }
             }
             HorizontalPager(
+                modifier = Modifier.wrapContentHeight().fillMaxWidth(),
                 count = detailDataTabContentList.size,
                 state = pagerState,
+                verticalAlignment = Alignment.Top,
             ) { page ->
                 when (page) {
-                    0 -> DetailDataOnFoot()
-                    1 -> DetailDataOnWeapon()
-                    2 -> DetailDataOnTank()
-                    3 -> DetailDataOnPlane()
-                    4 -> DetailDataOnGadget()
+                    0 -> DetailDataOnFoot(playerInfoViewModel)
+                    1 -> DetailDataOnWeapon(playerInfoViewModel)
+                    2 -> DetailDataOnTank(playerInfoViewModel)
+                    3 -> DetailDataOnPlane(playerInfoViewModel)
+                    4 -> DetailDataOnGadget(playerInfoViewModel)
                 }
             }
         }

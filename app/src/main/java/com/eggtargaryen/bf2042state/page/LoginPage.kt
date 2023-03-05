@@ -51,7 +51,7 @@ fun LoginPage(
     val internetPermissionState =
         rememberPermissionState(permission = android.Manifest.permission.INTERNET)
 
-    var username by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("FrostJun") }
     var expanded by remember { mutableStateOf(false) }
     var selectedPlatformText by remember { mutableStateOf("") }
     var selectedPlatform by remember { mutableStateOf(platformValOptions[0]) }
@@ -68,7 +68,11 @@ fun LoginPage(
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background),
         content = { innerPadding ->
-            Surface(modifier = Modifier.padding(innerPadding)) {
+            Surface(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .background(MaterialTheme.colors.background)
+            ) {
                 SideEffect {
                     if (!internetPermissionState.status.isGranted) {
                         scope.launch {
