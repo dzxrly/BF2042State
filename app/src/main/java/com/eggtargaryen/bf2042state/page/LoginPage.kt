@@ -51,7 +51,7 @@ fun LoginPage(
     val internetPermissionState =
         rememberPermissionState(permission = android.Manifest.permission.INTERNET)
 
-    var username by remember { mutableStateOf("FrostJun") }
+    var username by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var selectedPlatformText by remember { mutableStateOf("") }
     var selectedPlatform by remember { mutableStateOf(platformValOptions[0]) }

@@ -145,44 +145,30 @@ fun WeaponDataDetailListItem(
             }
         },
         content = {
-            FlowRow(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                mainAxisSpacing = 8.dp,
-                crossAxisSpacing = 8.dp,
-                mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween,
-                crossAxisAlignment = FlowCrossAxisAlignment.Center,
-                lastLineMainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_kpm),
-                    data = weaponItem.killsPerMinute.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_kpm),
+                    data_left = weaponItem.killsPerMinute.toString(),
+                    label_right = stringResource(id = R.string.state_detail_list_hsr),
+                    data_right = weaponItem.headshots
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_hsr),
-                    data = weaponItem.headshots
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_dpm),
+                    data_left = weaponItem.damagePerMinute.toString(),
+                    label_right = stringResource(id = R.string.state_detail_list_be_multi_kills),
+                    data_right = weaponItem.multiKills.toString()
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_dpm),
-                    data = weaponItem.damagePerMinute.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_be_multi_kills),
-                    data = weaponItem.multiKills.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_shot_count),
-                    data = weaponItem.shotsFired.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_dmg),
-                    data = weaponItem.damage.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_shot_count),
+                    data_left = weaponItem.shotsFired.toString(),
+                    label_right = stringResource(id = R.string.state_detail_list_dmg),
+                    data_right = weaponItem.damage.toString()
                 )
             }
         }

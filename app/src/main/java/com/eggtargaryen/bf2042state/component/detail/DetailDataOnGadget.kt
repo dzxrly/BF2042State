@@ -141,39 +141,28 @@ fun GadgetDataDetailListItem(
             }
         },
         content = {
-            FlowRow(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                mainAxisSpacing = 8.dp,
-                crossAxisSpacing = 8.dp,
-                mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween,
-                crossAxisAlignment = FlowCrossAxisAlignment.Center,
-                lastLineMainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_kpm),
-                    data = gadgetItem.kpm.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_kpm),
+                    data_left = gadgetItem.kpm.toString(),
+                    stringResource(id = R.string.state_detail_list_dpm),
+                    gadgetItem.dpm.toString()
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_dpm),
-                    data = gadgetItem.dpm.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_dmg),
+                    data_left = gadgetItem.damage.toString(),
+                    stringResource(id = R.string.state_detail_list_be_multi_kills),
+                    gadgetItem.multiKills.toString()
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_dmg),
-                    data = gadgetItem.damage.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_be_multi_kills),
-                    data = gadgetItem.multiKills.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_destroy_to),
-                    data = gadgetItem.vehiclesDestroyedWith.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_destroy_to),
+                    data_left = gadgetItem.vehiclesDestroyedWith.toString()
                 )
             }
         }

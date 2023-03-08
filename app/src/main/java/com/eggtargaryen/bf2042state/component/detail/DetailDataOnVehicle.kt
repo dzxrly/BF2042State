@@ -143,54 +143,36 @@ fun VehicleDataDetailListItem(
             }
         },
         content = {
-            FlowRow(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                mainAxisSpacing = 8.dp,
-                crossAxisSpacing = 8.dp,
-                mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween,
-                crossAxisAlignment = FlowCrossAxisAlignment.Center,
-                lastLineMainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_kpm),
-                    data = vehicleData.killsPerMinute.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_kpm),
+                    data_left = vehicleData.killsPerMinute.toString(),
+                    label_right = stringResource(id = R.string.state_detail_list_dmg),
+                    data_right = vehicleData.damage.toString()
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_dmg),
-                    data = vehicleData.damage.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_be_driver_assists),
+                    data_left = vehicleData.driverAssists.toString(),
+                    label_right = stringResource(id = R.string.state_detail_list_destroy_to),
+                    data_right = vehicleData.vehiclesDestroyedWith.toString()
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_be_driver_assists),
-                    data = vehicleData.driverAssists.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_be_destroy),
+                    data_left = vehicleData.destroyed.toString(),
+                    label_right = stringResource(id = R.string.state_detail_list_be_multi_kills),
+                    data_right = vehicleData.multiKills.toString()
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_destroy_to),
-                    data = vehicleData.vehiclesDestroyedWith.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_be_destroy),
-                    data = vehicleData.destroyed.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_be_multi_kills),
-                    data = vehicleData.multiKills.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_dis),
-                    data = vehicleData.distanceTraveled.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_be_road_kill),
-                    data = vehicleData.roadKills.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_dis),
+                    data_left = vehicleData.distanceTraveled.toString(),
+                    label_right = stringResource(id = R.string.state_detail_list_be_road_kill),
+                    data_right = vehicleData.roadKills.toString()
                 )
             }
         }

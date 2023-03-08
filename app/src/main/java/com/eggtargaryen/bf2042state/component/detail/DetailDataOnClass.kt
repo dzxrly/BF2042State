@@ -143,29 +143,22 @@ fun ClassDataDetailListItem(
             }
         },
         content = {
-            FlowRow(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                mainAxisSpacing = 8.dp,
-                crossAxisSpacing = 8.dp,
-                mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween,
-                crossAxisAlignment = FlowCrossAxisAlignment.Center,
-                lastLineMainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_kpm),
-                    data = classItem.kpm.toString()
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_kpm),
+                    data_left = classItem.kpm.toString(),
+                    label_right = stringResource(id = R.string.state_detail_list_kd),
+                    data_right = classItem.killDeath.toString()
                 )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_kd),
-                    data = classItem.killDeath.toString()
-                )
-                Spacer(modifier = Modifier.size(2.dp))
-                BaseDataBadgeRow(
-                    label = stringResource(id = R.string.state_detail_list_class_type),
-                    data = classItem.className
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_class_type),
+                    data_left = classItem.className
                 )
             }
         }
