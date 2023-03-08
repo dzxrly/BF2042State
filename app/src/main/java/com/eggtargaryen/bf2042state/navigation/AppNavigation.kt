@@ -71,7 +71,12 @@ fun AppNavigation(
         composable(Destinations.STATE) {
             StatePage(
                 onNavToLogin = {
-                    navController.navigate(Destinations.LOGIN)
+                    navController.navigate(Destinations.LOGIN) {
+                        popUpTo(Destinations.LOGIN) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
                 },
                 playerInfoViewModel = playerInfoViewModel
             )

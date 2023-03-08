@@ -1,6 +1,5 @@
 package com.eggtargaryen.bf2042state
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,16 +19,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BF2042StateTheme {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    window.setDecorFitsSystemWindows(false)
-                } else {
-                    val systemUiController = rememberSystemUiController()
-                    val useDarkIcons = !isSystemInDarkTheme()
-                    systemUiController.setSystemBarsColor(
-                        Color.Transparent,
-                        darkIcons = useDarkIcons
-                    )
-                }
+                val systemUiController = rememberSystemUiController()
+                val useDarkIcons = !isSystemInDarkTheme()
+                systemUiController.setSystemBarsColor(
+                    Color.Transparent,
+                    darkIcons = useDarkIcons
+                )
                 AppNavigation(
                     startDestination = Destinations.LOGIN
                 )

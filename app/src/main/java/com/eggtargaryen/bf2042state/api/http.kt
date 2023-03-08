@@ -46,10 +46,12 @@ class RequestBuilder : Callback {
     val client = OkHttpClient()
 
     fun request(): Call {
-        return client.newCall(when (method) {
-            "post", "Post", "POST" -> Request.Builder().url(urlBuilder(urls)).post(body!!)
-                .build()
-            else -> Request.Builder().url(urlBuilder(urls)).build()
-        })
+        return client.newCall(
+            when (method) {
+                "post", "Post", "POST" -> Request.Builder().url(urlBuilder(urls)).post(body!!)
+                    .build()
+                else -> Request.Builder().url(urlBuilder(urls)).build()
+            }
+        )
     }
 }

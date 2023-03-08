@@ -24,6 +24,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.*
+import com.eggtargaryen.bf2042state.component.detail.DetailDataOnGamemode
+import com.eggtargaryen.bf2042state.component.detail.DetailDataOnMap
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
@@ -35,13 +37,13 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun StatePage(
     onNavToLogin: () -> Unit = {},
     playerInfoViewModel: PlayerInfoViewModel
 ) {
     val playerInfo = playerInfoViewModel.getPlayerInfo()
-    val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val verticalScrollState = rememberScrollState()
 
@@ -108,6 +110,7 @@ fun StatePage(
                     PlayerBaseInfoCard(playerInfoViewModel)
                     PlayerBaseDataCard(playerInfoViewModel)
                     DataDetailCard(playerInfoViewModel)
+                    MapAndModeDetailCard(playerInfoViewModel)
                 }
             }
         }
@@ -123,10 +126,11 @@ fun PlayerBaseInfoCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(4.dp),
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.primary,
-        elevation = 4.dp
+        elevation = 4.dp,
+        shape = MaterialTheme.shapes.large
     ) {
         Column(
             modifier = Modifier
@@ -196,10 +200,11 @@ fun PlayerBaseDataCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(4.dp),
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.primary,
-        elevation = 4.dp
+        elevation = 4.dp,
+        shape = MaterialTheme.shapes.large
     ) {
         Column(
             modifier = Modifier
@@ -269,26 +274,27 @@ fun PlayerBaseDataCard(
 @Composable
 fun DataDetailCard(
     playerInfoViewModel: PlayerInfoViewModel,
-    initPageIndex: Int = 0
+    initPageIndex: Int = 0,
 ) {
     val pagerState = rememberPagerState(initPageIndex)
     val coroutineScope = rememberCoroutineScope()
 
     val detailDataTabContentList = listOf(
         stringResource(id = R.string.state_tab_foot),
+        stringResource(id = R.string.state_tab_class),
         stringResource(id = R.string.state_tab_weapon),
-        stringResource(id = R.string.state_tab_tank),
-        stringResource(id = R.string.state_tab_plane),
-        stringResource(id = R.string.state_tab_gadget)
+        stringResource(id = R.string.state_tab_vehicle),
+        stringResource(id = R.string.state_tab_gadget),
     )
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(4.dp),
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.primary,
-        elevation = 4.dp
+        elevation = 4.dp,
+        shape = MaterialTheme.shapes.large
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -305,6 +311,7 @@ fun DataDetailCard(
                 },
                 backgroundColor = MaterialTheme.colors.background,
                 contentColor = MaterialTheme.colors.primary,
+                edgePadding = 0.dp,
                 divider = { },
             ) {
                 detailDataTabContentList.forEachIndexed { index, title ->
@@ -320,16 +327,88 @@ fun DataDetailCard(
                 }
             }
             HorizontalPager(
-                modifier = Modifier.wrapContentHeight().fillMaxWidth(),
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
                 count = detailDataTabContentList.size,
                 state = pagerState,
                 verticalAlignment = Alignment.Top,
             ) { page ->
                 when (page) {
                     0 -> DetailDataOnFoot(playerInfoViewModel)
-                    1 -> DetailDataOnWeapon(playerInfoViewModel)
-                    2 -> DetailDataOnVehicle(playerInfoViewModel)
-                    3 -> DetailDataOnGadget(playerInfoViewModel)
+                    1 -> DetailDataOnClass(playerInfoViewModel)
+                    2 -> DetailDataOnWeapon(playerInfoViewModel)
+                    3 -> DetailDataOnVehicle(playerInfoViewModel)
+                    4 -> DetailDataOnGadget(playerInfoViewModel)
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun MapAndModeDetailCard(
+    playerInfoViewModel: PlayerInfoViewModel,
+    initPageIndex: Int = 0,
+) {
+    val pagerState = rememberPagerState(initPageIndex)
+    val coroutineScope = rememberCoroutineScope()
+
+    val mapAndModeTabContentList = listOf(
+        stringResource(id = R.string.state_tab_map),
+        stringResource(id = R.string.state_tab_mode),
+    )
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.primary,
+        elevation = 4.dp,
+        shape = MaterialTheme.shapes.large
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TabRow(
+                modifier = Modifier.fillMaxWidth(),
+                selectedTabIndex = pagerState.currentPage,
+                indicator = { tabPositions ->
+                    TabRowDefaults.Indicator(
+                        Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                    )
+                },
+                backgroundColor = MaterialTheme.colors.background,
+                contentColor = MaterialTheme.colors.primary,
+                divider = { },
+            ) {
+                mapAndModeTabContentList.forEachIndexed { index, title ->
+                    Tab(
+                        text = { Text(text = title) },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        }
+                    )
+                }
+            }
+            HorizontalPager(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+                count = mapAndModeTabContentList.size,
+                state = pagerState,
+                verticalAlignment = Alignment.Top,
+            ) { page ->
+                when (page) {
+                    0 -> DetailDataOnMap(playerInfoViewModel)
+                    1 -> DetailDataOnGamemode(playerInfoViewModel)
                 }
             }
         }

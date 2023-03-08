@@ -35,3 +35,29 @@ fun BaseDataBadge(
         )
     }
 }
+
+
+@Composable
+fun BaseDataBadgeRow(
+    label: String,
+    data: String,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start,
+    ) {
+        Text(
+            text = "$label:",
+            style = MaterialTheme.typography.body2,
+            color = MaterialTheme.colors.secondary,
+            textAlign = TextAlign.Start
+        )
+        Spacer(modifier = Modifier.size(2.dp))
+        Text(
+            text = data,
+            style = MaterialTheme.typography.body2,
+            color = MaterialTheme.colors.primary,
+            textAlign = TextAlign.Start
+        )
+    }
+}

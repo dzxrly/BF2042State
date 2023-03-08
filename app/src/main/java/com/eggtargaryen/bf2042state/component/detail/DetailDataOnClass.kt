@@ -1,13 +1,11 @@
 package com.eggtargaryen.bf2042state.component
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -15,31 +13,26 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.model.PurpleClass
 import com.eggtargaryen.bf2042state.utils.secondsToHours
+import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
+import com.google.accompanist.flowlayout.FlowRow
+import dev.esteki.expandable.Expandable
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DetailDataOnWeapon(
+fun DetailDataOnClass(
     playerInfoViewModel: PlayerInfoViewModel
 ) {
     val playerInfo = playerInfoViewModel.getPlayerInfo()
-    val (gesturesEnabled, toggleGesturesEnabled) = remember { mutableStateOf(true) }
-    val scope = rememberCoroutineScope()
-    var drawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
-    var selectedWeaponIndex = remember {
-        mutableStateOf(0)
-    }
-    val verticalScrollSate = rememberScrollState()
-
-    val weaponDataList =
-        playerInfo?.weapons?.sortedByDescending { Weapon -> Weapon.kills } ?: listOf()
+    val classDataList = playerInfo?.classes ?: listOf()
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(500.dp)
-            .verticalScroll(verticalScrollSate)
             .padding(8.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -54,7 +47,7 @@ fun DetailDataOnWeapon(
         ) {
             Text(
                 modifier = Modifier.weight(0.25f),
-                text = stringResource(id = R.string.state_detail_list_weapon_name),
+                text = stringResource(id = R.string.state_detail_list_class_name),
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Start
@@ -81,9 +74,37 @@ fun DetailDataOnWeapon(
                 textAlign = TextAlign.End
             )
         }
-        // List Content
-        weaponDataList.forEachIndexed { index, weaponData ->
-            Divider()
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            // List Content
+            classDataList.forEachIndexed { index, classData ->
+                item {
+                    Divider()
+                    ClassDataDetailListItem(classItem = classData)
+                }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ClassDataDetailListItem(
+    classItem: PurpleClass
+) {
+    val expanded = remember {
+        mutableStateOf(false)
+    }
+
+    Expandable(
+        expanded = expanded.value,
+        onExpandChanged = {
+            expanded.value = it
+        },
+        title = {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -93,33 +114,60 @@ fun DetailDataOnWeapon(
             ) {
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = weaponData.weaponName,
+                    text = classItem.characterName,
                     color = MaterialTheme.colors.secondary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Start
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = weaponData.kills.toString(),
+                    text = classItem.kills.toString(),
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = weaponData.killsPerMinute.toString(),
+                    text = classItem.kpm.toString(),
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = "${secondsToHours(weaponData.timeEquipped)}小时",
+                    text = "${secondsToHours(classItem.secondsPlayed)}小时",
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.End
                 )
             }
+        },
+        content = {
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                mainAxisSpacing = 8.dp,
+                crossAxisSpacing = 8.dp,
+                mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween,
+                crossAxisAlignment = FlowCrossAxisAlignment.Center,
+                lastLineMainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
+            ) {
+                BaseDataBadgeRow(
+                    label = stringResource(id = R.string.state_detail_list_kpm),
+                    data = classItem.kpm.toString()
+                )
+                Spacer(modifier = Modifier.size(2.dp))
+                BaseDataBadgeRow(
+                    label = stringResource(id = R.string.state_detail_list_kd),
+                    data = classItem.killDeath.toString()
+                )
+                Spacer(modifier = Modifier.size(2.dp))
+                BaseDataBadgeRow(
+                    label = stringResource(id = R.string.state_detail_list_class_type),
+                    data = classItem.className
+                )
+            }
         }
-    }
+    )
 }

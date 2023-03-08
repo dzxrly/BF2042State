@@ -10,8 +10,8 @@
 
     <string name="state_back">返回</string>
     <string name="state_tab_foot">步战</string>
-    <string name="state_tab_tank">坦克</string>
-    <string name="state_tab_plane">飞机</string>
+    <string name="state_tab_class">专家</string>
+    <string name="state_tab_vehicle">载具</string>
     <string name="state_tab_weapon">武器</string>
     <string name="state_tab_gadget">装备</string>
     <string name="state_tab_map">地图</string>
@@ -46,9 +46,31 @@
     <string name="state_detail_data_on_foot_repairs">维修次数</string>
 
     <string name="state_detail_list_weapon_name">武器名称</string>
+    <string name="state_detail_list_class_name">专家名称</string>
+    <string name="state_detail_list_vehicle_name">载具名称</string>
+    <string name="state_detail_list_gadget_name">装备名称</string>
     <string name="state_detail_list_kills">击杀数</string>
     <string name="state_detail_list_dpm">DPM</string>
     <string name="state_detail_list_kpm">KPM</string>
+    <string name="state_detail_list_kd">K/D</string>
+    <string name="state_detail_list_class_type">兵种类型</string>
+    <string name="state_detail_list_accuracy">命中率</string>
+    <string name="state_detail_list_dmg">伤害量</string>
+    <string name="state_detail_list_hsr">爆头率</string>
+    <string name="state_detail_list_shot_count">开火次数</string>
     <string name="state_detail_list_time">游玩时长</string>
-    <string name="state_detail_list_destroy">载具摧毁</string>
+    <string name="state_detail_list_use_count">使用次数</string>
+    <string name="state_detail_list_destroy_to">摧毁载具</string>
+    <string name="state_detail_list_dis">行驶距离</string>
+    <string name="state_detail_list_be_destroy">被摧毁次数</string>
+    <string name="state_detail_list_be_road_kill">撞死人数</string>
+    <string name="state_detail_list_be_driver_assists">驾驶助攻</string>
+    <string name="state_detail_list_be_multi_kills">连杀次数</string>
+
+    <string name="state_detail_null_error">没有更多数据</string>
+
+    <string name="state_map_mode_list_map_name">地图名称</string>
+    <string name="state_map_mode_list_mode_name">模式名称</string>
+    <string name="state_map_mode_list_win">获胜场数</string>
+    <string name="state_map_mode_list_winr">胜率</string>
 </resources>
