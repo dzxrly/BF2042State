@@ -1,6 +1,8 @@
 package com.eggtargaryen.bf2042state.component
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +30,7 @@ fun DetailDataOnWeapon(
     var selectedWeaponIndex = remember {
         mutableStateOf(0)
     }
+    val verticalScrollSate = rememberScrollState()
 
     val weaponDataList =
         playerInfo?.weapons?.sortedByDescending { Weapon -> Weapon.kills } ?: listOf()
@@ -35,6 +38,8 @@ fun DetailDataOnWeapon(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .height(500.dp)
+            .verticalScroll(verticalScrollSate)
             .padding(8.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally

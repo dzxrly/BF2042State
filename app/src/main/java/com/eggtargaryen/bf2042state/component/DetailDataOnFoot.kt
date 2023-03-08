@@ -1,6 +1,8 @@
 package com.eggtargaryen.bf2042state.component
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -45,9 +47,12 @@ fun DetailDataOnFoot(
     playerInfoViewModel: PlayerInfoViewModel
 ) {
     val playerInfo = playerInfoViewModel.getPlayerInfo()
+    val verticalScrollSate = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .height(500.dp)
+            .verticalScroll(verticalScrollSate)
             .padding(8.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
