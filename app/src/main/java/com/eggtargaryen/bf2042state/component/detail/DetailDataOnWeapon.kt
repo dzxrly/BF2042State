@@ -15,9 +15,6 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.model.Weapon
 import com.eggtargaryen.bf2042state.utils.secondsToHours
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
 import dev.esteki.expandable.Expandable
 
 

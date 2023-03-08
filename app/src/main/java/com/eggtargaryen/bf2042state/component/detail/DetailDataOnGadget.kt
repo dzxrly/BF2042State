@@ -14,9 +14,6 @@ import androidx.compose.ui.unit.dp
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.model.Gadget
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
 import dev.esteki.expandable.Expandable
 
 @OptIn(ExperimentalMaterialApi::class)
