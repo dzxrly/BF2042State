@@ -12,7 +12,7 @@ import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 
 
 @Composable
-fun DetailDataOnPlane(
+fun DetailDataOnVehicle(
     playerInfoViewModel: PlayerInfoViewModel
 ) {
     val playerInfo = playerInfoViewModel.getPlayerInfo()

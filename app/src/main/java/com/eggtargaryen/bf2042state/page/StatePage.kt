@@ -328,9 +328,8 @@ fun DataDetailCard(
                 when (page) {
                     0 -> DetailDataOnFoot(playerInfoViewModel)
                     1 -> DetailDataOnWeapon(playerInfoViewModel)
-                    2 -> DetailDataOnTank(playerInfoViewModel)
-                    3 -> DetailDataOnPlane(playerInfoViewModel)
-                    4 -> DetailDataOnGadget(playerInfoViewModel)
+                    2 -> DetailDataOnVehicle(playerInfoViewModel)
+                    3 -> DetailDataOnGadget(playerInfoViewModel)
                 }
             }
         }
