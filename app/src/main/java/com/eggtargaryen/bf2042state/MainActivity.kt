@@ -3,10 +3,9 @@ package com.eggtargaryen.bf2042state
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.eggtargaryen.bf2042state.navigation.AppNavigation
 import com.eggtargaryen.bf2042state.navigation.Destinations
@@ -20,10 +19,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             BF2042StateTheme {
                 val systemUiController = rememberSystemUiController()
-                val useDarkIcons = !isSystemInDarkTheme()
+
                 systemUiController.setSystemBarsColor(
-                    Color.Transparent,
-                    darkIcons = useDarkIcons
+                    MaterialTheme.colors.background,
+                    darkIcons = false
                 )
                 AppNavigation(
                     startDestination = Destinations.LOGIN

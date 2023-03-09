@@ -7,6 +7,14 @@
     <string name="login_label_about">关于</string>
     <string name="login_label_update">检查更新</string>
     <string name="login_snackbar_empty_error">用户名或平台不能为空！</string>
+    <string name="login_query_history">查询历史</string>
+
+    <string name="about_powered_by">Powered by </string>
+    <string name="about_jetpack_compose">Jetpack Compose</string>
+    <string name="about_api_from">API from </string>
+    <string name="about_gametools">gametools.network</string>
+    <string name="about_made_by">Xx__Koraidon__xX</string>
+    <string name="about_copyright"> | Copyright</string>
 
     <string name="state_back">返回</string>
     <string name="state_tab_foot">步战</string>
@@ -27,6 +35,20 @@
     <string name="state_base_data_card_kpM">场均击杀</string>
     <string name="state_base_data_card_M">游玩场数</string>
     <string name="state_base_data_best_class">最佳专家</string>
+    <string name="state_base_data_bfban">BFBan查询结果: </string>
+
+    <string name="state_bfban_info_loading">查询中...</string>
+    <string name="state_bfban_info_error">查询失败</string>
+    <string name="state_bfban_info_no_cheat">没有相关数据</string>
+    <string name="state_bfban_info_status_0">未处理</string>
+    <string name="state_bfban_info_status_1">石锤</string>
+    <string name="state_bfban_info_status_2">待自证</string>
+    <string name="state_bfban_info_status_3">MOSS自证</string>
+    <string name="state_bfban_info_status_4">无效举报</string>
+    <string name="state_bfban_info_status_5">讨论中</string>
+    <string name="state_bfban_info_status_6">需要更多管理投票</string>
+    <string name="state_bfban_info_status_7">null</string>
+    <string name="state_bfban_info_status_8">刷枪</string>
 
     <string name="state_detail_data_on_foot_kills">击杀数量</string>
     <string name="state_detail_data_on_foot_death">死亡次数</string>
@@ -58,6 +80,7 @@
     <string name="state_detail_list_dmg">伤害量</string>
     <string name="state_detail_list_hsr">爆头率</string>
     <string name="state_detail_list_shot_count">开火次数</string>
+    <string name="state_detail_list_hit_count">命中次数</string>
     <string name="state_detail_list_time">游玩时长</string>
     <string name="state_detail_list_use_count">使用次数</string>
     <string name="state_detail_list_destroy_to">摧毁载具</string>
@@ -73,4 +96,14 @@
     <string name="state_map_mode_list_mode_name">模式名称</string>
     <string name="state_map_mode_list_win">获胜场数</string>
     <string name="state_map_mode_list_winr">胜率</string>
+    <string name="state_map_mode_list_kpm">KPM</string>
+    <string name="state_map_mode_list_kills">击杀数</string>
+    <string name="state_map_mode_list_time">游玩时长</string>
+    <string name="state_map_mode_list_sector_defend">防守区域</string>
+    <string name="state_map_mode_list_boom_deploy">炸弹安装</string>
+    <string name="state_map_mode_list_boom_undeploy">炸弹拆除</string>
+    <string name="state_map_mode_list_boom_destroy">目标摧毁</string>
+    <string name="state_map_mode_list_objective_defend">防守目标</string>
+    <string name="state_map_mode_list_objective_capture">占领目标</string>
+    <string name="state_map_mode_list_objective_time">占点时长</string>
 </resources>

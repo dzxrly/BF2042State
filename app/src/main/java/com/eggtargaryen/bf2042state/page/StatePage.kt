@@ -120,7 +120,7 @@ fun StatePage(
 
 @Composable
 fun PlayerBaseInfoCard(
-    playerInfoViewModel: PlayerInfoViewModel
+    playerInfoViewModel: PlayerInfoViewModel,
 ) {
     val playerInfo = playerInfoViewModel.getPlayerInfo()
     Card(
@@ -135,7 +135,7 @@ fun PlayerBaseInfoCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -186,7 +186,20 @@ fun PlayerBaseInfoCard(
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
-            // TODO Ban Status
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = stringResource(id = R.string.state_base_data_bfban),
+                    style = MaterialTheme.typography.body2,
+                    color = MaterialTheme.colors.secondary,
+                    maxLines = 1
+                )
+                Spacer(modifier = Modifier.size(2.dp))
+                BFBanInfo(playerInfoViewModel)
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ fun AppNavigation(
     val navController = rememberAnimatedNavController()
     // PlayerInfoViewModel is a ViewModel that stores the player info
     val playerInfoViewModel = viewModel<PlayerInfoViewModel>()
+
     AnimatedNavHost(
         navController = navController,
         startDestination = startDestination,

@@ -156,16 +156,22 @@ fun WeaponDataDetailListItem(
                     data_right = weaponItem.headshots
                 )
                 TwoColumnBaseBadge(
-                    label_left = stringResource(id = R.string.state_detail_list_dpm),
-                    data_left = weaponItem.damagePerMinute.toString(),
+                    label_left = stringResource(id = R.string.state_detail_list_accuracy),
+                    data_left = weaponItem.accuracy,
+                    stringResource(id = R.string.state_detail_list_dpm),
+                    weaponItem.damagePerMinute.toString()
+                )
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_dmg),
+                    data_left = weaponItem.damage.toString(),
                     label_right = stringResource(id = R.string.state_detail_list_be_multi_kills),
                     data_right = weaponItem.multiKills.toString()
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_shot_count),
                     data_left = weaponItem.shotsFired.toString(),
-                    label_right = stringResource(id = R.string.state_detail_list_dmg),
-                    data_right = weaponItem.damage.toString()
+                    label_right = stringResource(id = R.string.state_detail_list_hit_count),
+                    data_right = weaponItem.shotsHit.toString()
                 )
             }
         }

@@ -9,3 +9,9 @@ fun secondsToHours(seconds: Long, fixedDigits: Int = 2): Double {
             .setScale(fixedDigits, BigDecimal.ROUND_HALF_UP).toDouble()
     } else -1.0
 }
+
+
+fun getYear(): String {
+    val year = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+    return year.toString()
+}

@@ -62,7 +62,7 @@ fun DetailDataOnMap(
             )
             Text(
                 modifier = Modifier.weight(0.25f),
-                text = stringResource(id = R.string.state_detail_list_time),
+                text = stringResource(id = R.string.state_map_mode_list_time),
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.End

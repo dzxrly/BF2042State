@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.api.getPlayerState
+import com.eggtargaryen.bf2042state.component.About
 import com.eggtargaryen.bf2042state.component.CustomSnackBar
 import com.eggtargaryen.bf2042state.component.RoundOutlineTextField
 import com.eggtargaryen.bf2042state.component.SnackBarType
@@ -54,7 +55,7 @@ fun LoginPage(
     var username by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var selectedPlatformText by remember { mutableStateOf("") }
-    var selectedPlatform by remember { mutableStateOf(platformValOptions[0]) }
+    var selectedPlatform by remember { mutableStateOf("") }
     var loadingState by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -64,14 +65,11 @@ fun LoginPage(
                 CustomSnackBar(snackBarType = SnackBarType.ERROR, data.message)
             }
         },
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colors.background),
+        modifier = Modifier.fillMaxSize(),
+        backgroundColor = MaterialTheme.colors.background,
         content = { innerPadding ->
             Surface(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .background(MaterialTheme.colors.background)
+                modifier = Modifier.padding(innerPadding)
             ) {
                 SideEffect {
                     if (!internetPermissionState.status.isGranted) {
@@ -177,29 +175,20 @@ fun LoginPage(
                                 ).enqueue(object : Callback {
                                     override fun onResponse(call: Call, response: Response) {
                                         val playerInfo = response.body?.string()
-                                        if (playerInfo != null) {
-                                            // moshi
-                                            try {
-                                                val moshi = Moshi.Builder()
-                                                    .add(KotlinJsonAdapterFactory())
-                                                    .build()
-                                                val playerInfoAdapter =
-                                                    moshi.adapter(PlayerInfo::class.java)
-                                                val playerInfoJson =
-                                                    playerInfoAdapter.fromJson(playerInfo)
-                                                playerInfoViewModel.postPlayerInfo(
-                                                    playerInfoJson!!
-                                                )
-                                                scope.launch { onNavToState() }
-                                            } catch (e: Exception) {
-                                                println(e)
-                                                scope.launch {
-                                                    scaffoldState.snackbarHostState.showSnackbar(
-                                                        "用户信息错误！$e"
-                                                    )
-                                                }
-                                            }
-                                        } else {
+                                        try {
+                                            val moshi = Moshi.Builder()
+                                                .add(KotlinJsonAdapterFactory())
+                                                .build()
+                                            val playerInfoAdapter =
+                                                moshi.adapter(PlayerInfo::class.java)
+                                            val playerInfoJson =
+                                                playerInfoAdapter.fromJson(playerInfo)
+                                            playerInfoViewModel.postPlayerInfo(
+                                                playerInfoJson!!
+                                            )
+                                            scope.launch { onNavToState() }
+                                        } catch (e: Exception) {
+                                            println(e)
                                             scope.launch {
                                                 scaffoldState.snackbarHostState.showSnackbar(
                                                     "未找到该用户！"
@@ -268,8 +257,40 @@ fun LoginPage(
                             }
                         }
                     }
+//                    Spacer(modifier = Modifier.height(12.dp))
+//                    Column(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        verticalArrangement = Arrangement.Center,
+//                        horizontalAlignment = Alignment.Start
+//                    ) {
+//                        Text(
+//                            text = stringResource(id = R.string.login_query_history),
+//                            style = MaterialTheme.typography.body2,
+//                            color = MaterialTheme.colors.secondary,
+//                            maxLines = 1
+//                        )
+//                        Spacer(modifier = Modifier.height(2.dp))
+//                        FlowRow(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            mainAxisSpacing = 2.dp,
+//                            crossAxisSpacing = 2.dp,
+//                            mainAxisAlignment = FlowMainAxisAlignment.Start,
+//                            crossAxisAlignment = FlowCrossAxisAlignment.Center,
+//                            lastLineMainAxisAlignment = FlowMainAxisAlignment.Start
+//                        ) {
+//                        }
+//                    }
                 }
             }
-        }
+        },
+        drawerContent = {
+            About(
+                onClose = {
+                    scope.launch { scaffoldState.drawerState.close() }
+                }
+            )
+        },
+        drawerBackgroundColor = MaterialTheme.colors.background,
+        drawerShape = RoundedCornerShape(topEnd = 19.dp, bottomEnd = 19.dp),
     )
 }

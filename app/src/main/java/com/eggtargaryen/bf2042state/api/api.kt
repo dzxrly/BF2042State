@@ -1,6 +1,7 @@
 package com.eggtargaryen.bf2042state.api
 
 import okhttp3.Call
+import okhttp3.RequestBody.Companion.toRequestBody
 
 fun getPlayerState(
     playerName: String,
@@ -28,12 +29,13 @@ fun getPlayerState(
 // status=6: 需要更多管理投票
 // status=7:
 // status=8: 刷枪
-fun getPlayerBFBanStatus(
+fun postPlayerBFBanStatus(
     playerName: String
 ): Call {
     val baseApi = RequestBuilder()
-    baseApi.urls = "/bfban/checkban?names=$playerName"
-    baseApi.method = "GET"
+    baseApi.urls = "/bfban/checkban"
+    baseApi.method = "POST"
+    baseApi.body = "[{\"name\": \"$playerName\"}]".toRequestBody()
     baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
     return baseApi.request()
 }
