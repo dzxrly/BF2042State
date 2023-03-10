@@ -15,7 +15,6 @@
 ![详细数据](https://github.com/dzxrly/BF2042State/blob/main/img/3.png)
 ![详细数据](https://github.com/dzxrly/BF2042State/blob/main/img/4.png)
 
-
 ---
 
 Powered by Jetpack Compose
