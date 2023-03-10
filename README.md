@@ -2,7 +2,7 @@
 
 一个简陋的战地2042战绩查询应用，由Egg Targaryen (橘子ID: Xx__Koraidon__xX) 开发。
 
-> 特别感谢[Gametools](gametool.network)公开API，本应用使用了其提供的API。BFBan数据来自其公开接口，**本应用不对查询结果负责！如有疑问请联系BFBan**。
+> 特别感谢[Gametools](https://gametools.network/)公开API，本应用使用了其提供的API。BFBan数据来自其公开接口，**本应用不对查询结果负责！如有疑问请联系BFBan**。
 
 ## 下载地址
 
