@@ -113,7 +113,7 @@ fun WeaponDataDetailListItem(
             ) {
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = weaponItem.weaponName,
+                    text = weaponItem.weaponName ?: "Unknown",
                     color = MaterialTheme.colors.secondary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Start
@@ -134,7 +134,7 @@ fun WeaponDataDetailListItem(
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = "${secondsToHours(weaponItem.timeEquipped)}小时",
+                    text = "${secondsToHours(weaponItem.timeEquipped ?: 0L)}小时",
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.End
@@ -153,11 +153,11 @@ fun WeaponDataDetailListItem(
                     label_left = stringResource(id = R.string.state_detail_list_kpm),
                     data_left = weaponItem.killsPerMinute.toString(),
                     label_right = stringResource(id = R.string.state_detail_list_hsr),
-                    data_right = weaponItem.headshots
+                    data_right = weaponItem.headshots ?: "0.0%"
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_accuracy),
-                    data_left = weaponItem.accuracy,
+                    data_left = weaponItem.accuracy ?: "0.0%",
                     stringResource(id = R.string.state_detail_list_dpm),
                     weaponItem.damagePerMinute.toString()
                 )

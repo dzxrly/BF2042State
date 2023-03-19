@@ -113,7 +113,7 @@ fun GamemodeDataDetailListItem(
             ) {
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = gamemodeItem.gamemodeName,
+                    text = gamemodeItem.gamemodeName ?: "Unknown",
                     color = MaterialTheme.colors.secondary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Start
@@ -127,14 +127,14 @@ fun GamemodeDataDetailListItem(
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = gamemodeItem.winPercent,
+                    text = gamemodeItem.winPercent ?: "0.0%",
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = "${secondsToHours(gamemodeItem.secondsPlayed)}小时",
+                    text = "${secondsToHours(gamemodeItem.secondsPlayed ?: 0L)}小时",
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.End
@@ -175,7 +175,7 @@ fun GamemodeDataDetailListItem(
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_map_mode_list_objective_time),
-                    data_left = "${secondsToHours(gamemodeItem.objetiveTime)}小时"
+                    data_left = "${secondsToHours(gamemodeItem.objetiveTime ?: 0L)}小时"
                 )
             }
         }

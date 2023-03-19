@@ -109,7 +109,7 @@ fun GadgetDataDetailListItem(
             ) {
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = gadgetItem.gadgetName,
+                    text = gadgetItem.gadgetName ?: "Unknown",
                     color = MaterialTheme.colors.secondary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Start

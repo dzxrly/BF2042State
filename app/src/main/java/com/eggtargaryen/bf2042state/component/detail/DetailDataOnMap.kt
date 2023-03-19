@@ -85,7 +85,7 @@ fun DetailDataOnMap(
                     ) {
                         Text(
                             modifier = Modifier.weight(0.25f),
-                            text = mapData.mapName,
+                            text = mapData.mapName ?: "Unknown",
                             color = MaterialTheme.colors.secondary,
                             style = MaterialTheme.typography.body1,
                             textAlign = TextAlign.Start
@@ -99,14 +99,14 @@ fun DetailDataOnMap(
                         )
                         Text(
                             modifier = Modifier.weight(0.25f),
-                            text = mapData.winPercent,
+                            text = mapData.winPercent ?: "0.0%",
                             color = MaterialTheme.colors.primary,
                             style = MaterialTheme.typography.body1,
                             textAlign = TextAlign.Center
                         )
                         Text(
                             modifier = Modifier.weight(0.25f),
-                            text = "${secondsToHours(mapData.secondsPlayed)}小时",
+                            text = "${secondsToHours(mapData.secondsPlayed ?: 0L)}小时",
                             color = MaterialTheme.colors.primary,
                             style = MaterialTheme.typography.body1,
                             textAlign = TextAlign.End

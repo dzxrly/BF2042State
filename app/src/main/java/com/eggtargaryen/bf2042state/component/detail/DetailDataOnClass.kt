@@ -111,7 +111,7 @@ fun ClassDataDetailListItem(
             ) {
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = classItem.characterName,
+                    text = classItem.characterName ?: "Unknown",
                     color = MaterialTheme.colors.secondary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Start
@@ -132,7 +132,7 @@ fun ClassDataDetailListItem(
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = "${secondsToHours(classItem.secondsPlayed)}小时",
+                    text = "${secondsToHours(classItem.secondsPlayed ?: 0L)}小时",
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.End
@@ -155,7 +155,7 @@ fun ClassDataDetailListItem(
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_class_type),
-                    data_left = classItem.className
+                    data_left = classItem.className ?: "Unknown"
                 )
             }
         }

@@ -111,7 +111,7 @@ fun VehicleDataDetailListItem(
             ) {
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = vehicleData.vehicleName,
+                    text = vehicleData.vehicleName ?: "Unknown",
                     color = MaterialTheme.colors.secondary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Start
@@ -132,7 +132,7 @@ fun VehicleDataDetailListItem(
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = "${secondsToHours(vehicleData.timeIn)}小时",
+                    text = "${secondsToHours(vehicleData.timeIn ?: 0L)}小时",
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.End
