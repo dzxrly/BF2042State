@@ -59,10 +59,9 @@ data class PlayerInfo(
     val thrownThrowables: Long? = 0L,
     val timePlayed: String? = "",
 
-    @Json(name = "userId")
-    val userID: Long,
-
+    val userId: Long,
     val userName: String,
+
     val vehicleGroups: List<VehicleGroup>? = null,
     var vehicles: List<Vehicle>? = null,
     val vehiclesDestroyed: Long? = 0L,
