@@ -7,10 +7,11 @@ fun getPlayerState(
     playerName: String,
     platform: String,
     formatValues: String = "false",
+    skipBattleLog: String = "true"
 ): Call {
     val baseApi = RequestBuilder()
     baseApi.urls =
-        "/bf2042/all/?format_values=$formatValues&name=$playerName&lang=zh-tw&platform=$platform&"
+        "/bf2042/stats/?raw=false&format_values=$formatValues&name=$playerName&platform=$platform&skip_battlelog=$skipBattleLog"
     baseApi.method = "GET"
     baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
     return baseApi.request()
