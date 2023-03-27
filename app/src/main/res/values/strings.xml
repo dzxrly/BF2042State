@@ -14,7 +14,7 @@
     <string name="about_jetpack_compose">Jetpack Compose</string>
     <string name="about_api_from">API from </string>
     <string name="about_gametools">gametools.network</string>
-    <string name="about_version">Ver.1.0.0-alpha</string>
+    <string name="about_version">1.0.2</string>
     <string name="about_copyright"> | Copyright</string>
 
     <string name="state_back">返回</string>
@@ -55,6 +55,7 @@
     <string name="state_detail_data_on_foot_death">死亡次数</string>
     <string name="state_detail_data_on_foot_assist">助攻次数</string>
     <string name="state_detail_data_on_foot_mvp">MVP数量</string>
+    <string name="state_detail_data_on_foot_best_squad">最佳小队次数</string>
     <string name="state_detail_data_on_foot_wins">获胜次数</string>
     <string name="state_detail_data_on_foot_loses">战败次数</string>
     <string name="state_detail_data_on_foot_hs">爆头次数</string>

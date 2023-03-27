@@ -1,4 +1,4 @@
-package com.eggtargaryen.bf2042state.component
+package com.eggtargaryen.bf2042state.component.detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -75,6 +75,11 @@ fun DetailDataOnFoot(
         DetailRow(
             label = stringResource(id = R.string.state_detail_data_on_foot_mvp),
             data = playerInfo?.mvp.toString() ?: "0"
+        )
+        Divider()
+        DetailRow(
+            label = stringResource(id = R.string.state_detail_data_on_foot_best_squad),
+            data = playerInfo?.bestSquad.toString() ?: "0"
         )
         Divider()
         DetailRow(

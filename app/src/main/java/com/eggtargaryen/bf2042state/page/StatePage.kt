@@ -24,8 +24,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.*
-import com.eggtargaryen.bf2042state.component.detail.DetailDataOnGamemode
-import com.eggtargaryen.bf2042state.component.detail.DetailDataOnMap
+import com.eggtargaryen.bf2042state.component.detail.*
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment

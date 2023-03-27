@@ -1,4 +1,4 @@
-package com.eggtargaryen.bf2042state.component
+package com.eggtargaryen.bf2042state.component.detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.eggtargaryen.bf2042state.R
+import com.eggtargaryen.bf2042state.component.TwoColumnBaseBadge
 import com.eggtargaryen.bf2042state.model.Gadget
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import dev.esteki.expandable.Expandable
