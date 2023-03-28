@@ -3,15 +3,27 @@ package com.eggtargaryen.bf2042state.api
 import okhttp3.Call
 import okhttp3.RequestBody.Companion.toRequestBody
 
+
+fun getPlayerId(
+    playerName: String
+): Call {
+    val baseApi = RequestBuilder()
+    baseApi.urls = "/bf2042/player/?name=$playerName"
+    baseApi.method = "GET"
+    baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
+    return baseApi.request()
+}
+
+
 fun getPlayerState(
-    playerName: String,
+    playerId: Long,
     platform: String,
-    formatValues: String = "false",
-    skipBattleLog: String = "true"
+    formatValues: Boolean = false,
+    skipBattleLog: Boolean = true
 ): Call {
     val baseApi = RequestBuilder()
     baseApi.urls =
-        "/bf2042/stats/?raw=false&format_values=$formatValues&name=$playerName&platform=$platform&skip_battlelog=$skipBattleLog"
+        "/bf2042/stats/?raw=false&format_values=$formatValues&nucleus_id=$playerId&platform=$platform&skip_battlelog=$skipBattleLog"
     baseApi.method = "GET"
     baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
     return baseApi.request()

@@ -18,11 +18,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eggtargaryen.bf2042state.R
+import com.eggtargaryen.bf2042state.api.getPlayerId
 import com.eggtargaryen.bf2042state.api.getPlayerState
 import com.eggtargaryen.bf2042state.component.About
 import com.eggtargaryen.bf2042state.component.CustomSnackBar
 import com.eggtargaryen.bf2042state.component.RoundOutlineTextField
 import com.eggtargaryen.bf2042state.component.SnackBarType
+import com.eggtargaryen.bf2042state.model.PlayerId
 import com.eggtargaryen.bf2042state.model.PlayerInfo
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -53,6 +55,7 @@ fun LoginPage(
         rememberPermissionState(permission = android.Manifest.permission.INTERNET)
 
     var username by remember { mutableStateOf("") }
+    var playerId by remember { mutableStateOf(0L) }
     var expanded by remember { mutableStateOf(false) }
     var selectedPlatformText by remember { mutableStateOf("") }
     var selectedPlatform by remember { mutableStateOf("") }
@@ -169,25 +172,63 @@ fun LoginPage(
                             loadingState = true
                             // Check if username and platform is empty
                             if (username.isNotEmpty() && selectedPlatform.isNotEmpty()) {
-                                getPlayerState(
-                                    username,
-                                    selectedPlatform,
+                                getPlayerId(
+                                    username
                                 ).enqueue(object : Callback {
                                     override fun onResponse(call: Call, response: Response) {
-                                        val playerInfo = response.body?.string()
+                                        val playerIdRes = response.body?.string()
+                                        println(playerIdRes)
                                         try {
                                             val moshi = Moshi.Builder()
                                                 .add(KotlinJsonAdapterFactory())
                                                 .build()
-                                            val playerInfoAdapter =
-                                                moshi.adapter(PlayerInfo::class.java)
-                                            val playerInfoJson =
-                                                playerInfoAdapter.fromJson(playerInfo)
-                                            playerInfoViewModel.postPlayerInfo(
-                                                playerInfoJson!!
-                                            )
-                                            scope.launch { onNavToState() }
+                                            val playerIdResAdapter =
+                                                moshi.adapter(PlayerId::class.java)
+                                            val playerIdResJson =
+                                                playerIdResAdapter.fromJson(playerIdRes)
+                                            playerId =
+                                                playerIdResJson?.results?.get(0)?.nucleusID
+                                                    ?: 0L
+                                            getPlayerState(
+                                                playerId,
+                                                selectedPlatform,
+                                            ).enqueue(object : Callback {
+                                                override fun onResponse(call: Call, response: Response) {
+                                                    val playerInfo = response.body?.string()
+                                                    try {
+                                                        val moshi = Moshi.Builder()
+                                                            .add(KotlinJsonAdapterFactory())
+                                                            .build()
+                                                        val playerInfoAdapter =
+                                                            moshi.adapter(PlayerInfo::class.java)
+                                                        val playerInfoJson =
+                                                            playerInfoAdapter.fromJson(playerInfo)
+                                                        playerInfoViewModel.postPlayerInfo(
+                                                            playerInfoJson!!
+                                                        )
+                                                        scope.launch { onNavToState() }
+                                                    } catch (e: Exception) {
+                                                        println(e)
+                                                        scope.launch {
+                                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                                "未找到该用户！"
+                                                            )
+                                                        }
+                                                    }
+                                                    loadingState = false
+                                                }
+
+                                                override fun onFailure(call: Call, e: IOException) {
+                                                    scope.launch {
+                                                        scaffoldState.snackbarHostState.showSnackbar(
+                                                            "网络连接异常，请重试。"
+                                                        )
+                                                    }
+                                                    loadingState = false
+                                                }
+                                            })
                                         } catch (e: Exception) {
+                                            loadingState = false
                                             println(e)
                                             scope.launch {
                                                 scaffoldState.snackbarHostState.showSnackbar(
@@ -195,7 +236,6 @@ fun LoginPage(
                                                 )
                                             }
                                         }
-                                        loadingState = false
                                     }
 
                                     override fun onFailure(call: Call, e: IOException) {
