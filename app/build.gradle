@@ -12,8 +12,8 @@ android {
         applicationId "com.eggtargaryen.bf2042state"
         minSdk 26
         targetSdk 33
-        versionCode 8
-        versionName "1.0.4"
+        versionCode 9
+        versionName "1.0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -75,4 +75,6 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
     ksp "com.squareup.moshi:moshi-kotlin-codegen:1.14.0"
+
+    implementation "com.github.FunnySaltyFish.ComposeDataSaver:data-saver:v1.1.5"
 }

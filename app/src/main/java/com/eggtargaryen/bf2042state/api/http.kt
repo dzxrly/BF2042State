@@ -8,6 +8,7 @@ object BF2042StateBaseApi {
     val devMode = false
     val baseApi = "https://api.gametools.network"
     val feslApi = "https://fesl.gametools.network"
+    val giteeApi = "https://gitee.com/api/v5"
     val baseDevApi = "http://127.0.0.1:4523/m1/2353382-0-default"
     val timeout = 30000  // 30s
 }

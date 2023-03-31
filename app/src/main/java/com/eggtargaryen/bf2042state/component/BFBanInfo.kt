@@ -106,7 +106,7 @@ fun BFBanInfo(
             colors = when (label) {
                 1 -> ButtonDefaults.textButtonColors(
                     backgroundColor = Color.Transparent,
-                    contentColor = MaterialTheme.colors.onError,
+                    contentColor = MaterialTheme.colors.error,
                 )
                 else -> ButtonDefaults.textButtonColors(
                     backgroundColor = Color.Transparent,

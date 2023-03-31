@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.eggtargaryen.bf2042state.BuildConfig
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.utils.getYear
 
@@ -25,6 +26,7 @@ fun About(
 ) {
     val verticalScrollString = rememberScrollState()
     val localUriHandler = LocalUriHandler.current
+    val version = BuildConfig.VERSION_NAME
 
     Column(
         modifier = Modifier
@@ -143,7 +145,7 @@ fun About(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.about_version),
+                    text = version,
                     style = MaterialTheme.typography.body1,
                     color = MaterialTheme.colors.primary,
                     textAlign = TextAlign.Center

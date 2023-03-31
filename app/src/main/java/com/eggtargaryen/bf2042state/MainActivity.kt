@@ -6,10 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.tooling.preview.Preview
 import com.eggtargaryen.bf2042state.navigation.AppNavigation
 import com.eggtargaryen.bf2042state.navigation.Destinations
 import com.eggtargaryen.bf2042state.ui.theme.BF2042StateTheme
+import com.funny.data_saver.core.DataSaverPreferences
+import com.funny.data_saver.core.LocalDataSaver
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
@@ -19,14 +22,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             BF2042StateTheme {
                 val systemUiController = rememberSystemUiController()
+                val dataSaverPreferences = DataSaverPreferences(applicationContext)
 
                 systemUiController.setSystemBarsColor(
                     MaterialTheme.colors.background,
                     darkIcons = false
                 )
-                AppNavigation(
-                    startDestination = Destinations.LOGIN
-                )
+                CompositionLocalProvider(LocalDataSaver provides dataSaverPreferences) {
+                    AppNavigation(
+                        startDestination = Destinations.LOGIN
+                    )
+                }
             }
         }
     }

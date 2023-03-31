@@ -18,18 +18,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eggtargaryen.bf2042state.R
-import com.eggtargaryen.bf2042state.api.getPlayerId
-import com.eggtargaryen.bf2042state.api.getPlayerStateByPlayerId
-import com.eggtargaryen.bf2042state.api.getPlayerStateByPlayerName
-import com.eggtargaryen.bf2042state.api.searchPlayerByName
-import com.eggtargaryen.bf2042state.component.About
-import com.eggtargaryen.bf2042state.component.CustomSnackBar
-import com.eggtargaryen.bf2042state.component.RoundOutlineTextField
-import com.eggtargaryen.bf2042state.component.SnackBarType
-import com.eggtargaryen.bf2042state.model.PlayerId
-import com.eggtargaryen.bf2042state.model.PlayerInfo
-import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
-import com.eggtargaryen.bf2042state.model.PlayerQueryList
+import com.eggtargaryen.bf2042state.api.*
+import com.eggtargaryen.bf2042state.component.*
+import com.eggtargaryen.bf2042state.model.*
+import com.funny.data_saver.core.rememberDataSaverListState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -67,6 +59,11 @@ fun LoginPage(
     var searchTextFieldLoadingState by remember { mutableStateOf(false) }
     var enableQueryEnhance by remember { mutableStateOf(false) }
     var queryList by remember { mutableStateOf(PlayerQueryList()) }
+    var historyDropdownMenuOpen by remember { mutableStateOf(false) }
+    val queryHistory by rememberDataSaverListState(
+        key = "query_history",
+        default = listOf<String>()
+    )
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -181,7 +178,6 @@ fun LoginPage(
                                     ).enqueue(object : Callback {
                                         override fun onResponse(call: Call, response: Response) {
                                             val playerQueryList = response.body?.string()
-                                            println(playerQueryList)
                                             try {
                                                 val moshi = Moshi.Builder()
                                                     .add(KotlinJsonAdapterFactory())
@@ -196,7 +192,6 @@ fun LoginPage(
                                                 searchTextFieldLoadingState = false
                                             } catch (e: Exception) {
                                                 searchTextFieldLoadingState = false
-                                                println(e)
                                             }
                                         }
 
@@ -254,7 +249,6 @@ fun LoginPage(
                                     ).enqueue(object : Callback {
                                         override fun onResponse(call: Call, response: Response) {
                                             val playerIdRes = response.body?.string()
-                                            println(playerIdRes)
                                             try {
                                                 val moshi = Moshi.Builder()
                                                     .add(KotlinJsonAdapterFactory())
@@ -288,9 +282,17 @@ fun LoginPage(
                                                             playerInfoViewModel.postPlayerInfo(
                                                                 playerInfoJson!!
                                                             )
+                                                            if (queryHistory.size >= 10) {
+                                                                queryHistory.drop(1)
+                                                            }
+                                                            if (!queryHistory.contains(
+                                                                    playerInfoJson.userName
+                                                                )
+                                                            ) {
+                                                                queryHistory.plus(playerInfoJson.userName)
+                                                            }
                                                             scope.launch { onNavToState() }
                                                         } catch (e: Exception) {
-                                                            println(e)
                                                             scope.launch {
                                                                 scaffoldState.snackbarHostState.showSnackbar(
                                                                     "未找到该用户！"
@@ -314,7 +316,6 @@ fun LoginPage(
                                                 })
                                             } catch (e: Exception) {
                                                 queryBtnLoadingState = false
-                                                println(e)
                                                 scope.launch {
                                                     scaffoldState.snackbarHostState.showSnackbar(
                                                         "未找到该用户！"
@@ -353,9 +354,14 @@ fun LoginPage(
                                                 playerInfoViewModel.postPlayerInfo(
                                                     playerInfoJson!!
                                                 )
+                                                if (queryHistory.size >= 10) {
+                                                    queryHistory.drop(1)
+                                                }
+                                                if (!queryHistory.contains(playerInfoJson.userName)) {
+                                                    queryHistory.plus(playerInfoJson.userName)
+                                                }
                                                 scope.launch { onNavToState() }
                                             } catch (e: Exception) {
-                                                println(e)
                                                 scope.launch {
                                                     scaffoldState.snackbarHostState.showSnackbar(
                                                         "未找到该用户！可以尝试开启增强查询"
@@ -427,27 +433,69 @@ fun LoginPage(
                     }
                     Spacer(modifier = Modifier.height(12.dp))
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Switch(
-                            checked = enableQueryEnhance,
-                            onCheckedChange = { enableQueryEnhance = it },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colors.primary,
-                                checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.32f),
-                                uncheckedThumbColor = MaterialTheme.colors.background,
-                                uncheckedTrackColor = MaterialTheme.colors.background.copy(alpha = 0.32f),
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Switch(
+                                checked = enableQueryEnhance,
+                                onCheckedChange = { enableQueryEnhance = it },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = MaterialTheme.colors.primary,
+                                    checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.32f),
+                                    uncheckedThumbColor = MaterialTheme.colors.background,
+                                    uncheckedTrackColor = MaterialTheme.colors.background.copy(alpha = 0.32f),
+                                )
                             )
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = R.string.login_query_enable),
-                            style = MaterialTheme.typography.body2,
-                        )
-                        Spacer(modifier = Modifier.width(2.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = stringResource(id = R.string.login_query_enable),
+                                style = MaterialTheme.typography.body2,
+                                color = MaterialTheme.colors.secondary
+                            )
+                        }
+                        Box() {
+                            TextButton(
+                                onClick = { historyDropdownMenuOpen = true },
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.login_query_history),
+                                    style = MaterialTheme.typography.body2,
+                                    color = MaterialTheme.colors.secondary
+                                )
+                            }
+                            DropdownMenu(
+                                modifier = Modifier
+                                    .wrapContentHeight()
+                                    .background(MaterialTheme.colors.background),
+                                expanded = historyDropdownMenuOpen,
+                                onDismissRequest = { historyDropdownMenuOpen = false }) {
+                                if (queryHistory.isEmpty()) {
+                                    Text(
+                                        modifier = Modifier.padding(16.dp),
+                                        text = stringResource(id = R.string.login_query_history_is_empty)
+                                    )
+                                } else {
+                                    queryHistory.forEach { history ->
+                                        DropdownMenuItem(
+                                            onClick = {
+                                                username = history
+                                                historyDropdownMenuOpen = false
+                                            }
+                                        ) { Text(text = history) }
+                                    }
+                                }
+                            }
+                        }
+
                     }
+                    UpdateButton(scaffoldState = scaffoldState)
                 }
             }
         },

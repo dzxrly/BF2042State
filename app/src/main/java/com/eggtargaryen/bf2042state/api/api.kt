@@ -4,6 +4,15 @@ import okhttp3.Call
 import okhttp3.RequestBody.Companion.toRequestBody
 
 
+fun updateCheck(): Call {
+    val baseApi = RequestBuilder()
+    baseApi.baseApi = BF2042StateBaseApi.giteeApi
+    baseApi.urls = "/repos/egg-targaryen/BF2042State/releases/latest"
+    baseApi.method = "GET"
+    baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
+    return baseApi.request()
+}
+
 fun searchPlayerByName(
     playerNameKeyword: String,
     platform: String
