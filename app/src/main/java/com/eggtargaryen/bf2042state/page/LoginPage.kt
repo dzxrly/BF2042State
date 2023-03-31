@@ -21,7 +21,7 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.api.*
 import com.eggtargaryen.bf2042state.component.*
 import com.eggtargaryen.bf2042state.model.*
-import com.funny.data_saver.core.rememberDataSaverListState
+import com.funny.data_saver.core.rememberDataSaverState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -41,6 +41,7 @@ fun LoginPage(
     onNavToState: () -> Unit = {},
     playerInfoViewModel: PlayerInfoViewModel
 ) {
+    val cacheLimitation = 6
     val platformLabelOptions =
         listOf("PC", "Xbox One", "Xbox Series", "PlayStation 4", "PlayStation 5")
     val platformValOptions = listOf("pc", "xboxone", "xboxseries", "ps4", "ps5")
@@ -60,10 +61,7 @@ fun LoginPage(
     var enableQueryEnhance by remember { mutableStateOf(false) }
     var queryList by remember { mutableStateOf(PlayerQueryList()) }
     var historyDropdownMenuOpen by remember { mutableStateOf(false) }
-    val queryHistory by rememberDataSaverListState(
-        key = "query_history",
-        default = listOf<String>()
-    )
+    var queryHistory by rememberDataSaverState("query_history", "")
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -79,6 +77,7 @@ fun LoginPage(
                 modifier = Modifier.padding(innerPadding)
             ) {
                 SideEffect {
+                    println(queryHistory)
                     if (!internetPermissionState.status.isGranted) {
                         scope.launch {
                             scaffoldState.snackbarHostState.showSnackbar(
@@ -282,14 +281,26 @@ fun LoginPage(
                                                             playerInfoViewModel.postPlayerInfo(
                                                                 playerInfoJson!!
                                                             )
-                                                            if (queryHistory.size >= 10) {
-                                                                queryHistory.drop(1)
+                                                            var queryHistoryList =
+                                                                queryHistory.split("#@#")
+                                                            if (queryHistoryList.size >= cacheLimitation) {
+                                                                queryHistory =
+                                                                    queryHistoryList.drop(1)
+                                                                        .joinToString("#@#")
+                                                                queryHistoryList =
+                                                                    queryHistoryList.drop(1)
                                                             }
-                                                            if (!queryHistory.contains(
+                                                            if (!queryHistoryList.contains(
                                                                     playerInfoJson.userName
                                                                 )
                                                             ) {
-                                                                queryHistory.plus(playerInfoJson.userName)
+                                                                queryHistory =
+                                                                    if (queryHistoryList.isNotEmpty()) {
+                                                                        queryHistoryList.plus(
+                                                                            playerInfoJson.userName
+                                                                        )
+                                                                            .joinToString("#@#")
+                                                                    } else playerInfoJson.userName
                                                             }
                                                             scope.launch { onNavToState() }
                                                         } catch (e: Exception) {
@@ -354,11 +365,23 @@ fun LoginPage(
                                                 playerInfoViewModel.postPlayerInfo(
                                                     playerInfoJson!!
                                                 )
-                                                if (queryHistory.size >= 10) {
-                                                    queryHistory.drop(1)
+                                                var queryHistoryList = if (queryHistory != "") {
+                                                    queryHistory.split("#@#")
+                                                } else {
+                                                    listOf<String>()
                                                 }
-                                                if (!queryHistory.contains(playerInfoJson.userName)) {
-                                                    queryHistory.plus(playerInfoJson.userName)
+                                                if (queryHistoryList.size >= cacheLimitation) {
+                                                    queryHistory =
+                                                        queryHistoryList.drop(1).joinToString("#@#")
+                                                    queryHistoryList = queryHistoryList.drop(1)
+                                                }
+                                                if (!queryHistoryList.contains(playerInfoJson.userName)) {
+                                                    println(queryHistoryList.size)
+                                                    queryHistory =
+                                                        if (queryHistoryList.isNotEmpty()) {
+                                                            queryHistoryList.plus(playerInfoJson.userName)
+                                                                .joinToString("#@#")
+                                                        } else playerInfoJson.userName
                                                 }
                                                 scope.launch { onNavToState() }
                                             } catch (e: Exception) {
@@ -460,7 +483,7 @@ fun LoginPage(
                                 color = MaterialTheme.colors.secondary
                             )
                         }
-                        Box() {
+                        Box {
                             TextButton(
                                 onClick = { historyDropdownMenuOpen = true },
                             ) {
@@ -476,13 +499,13 @@ fun LoginPage(
                                     .background(MaterialTheme.colors.background),
                                 expanded = historyDropdownMenuOpen,
                                 onDismissRequest = { historyDropdownMenuOpen = false }) {
-                                if (queryHistory.isEmpty()) {
+                                if (queryHistory.split("#@#").isEmpty()) {
                                     Text(
                                         modifier = Modifier.padding(16.dp),
                                         text = stringResource(id = R.string.login_query_history_is_empty)
                                     )
                                 } else {
-                                    queryHistory.forEach { history ->
+                                    queryHistory.split("#@#").forEach { history ->
                                         DropdownMenuItem(
                                             onClick = {
                                                 username = history
