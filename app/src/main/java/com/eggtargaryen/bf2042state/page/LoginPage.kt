@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.api.getPlayerId
-import com.eggtargaryen.bf2042state.api.getPlayerState
+import com.eggtargaryen.bf2042state.api.getPlayerStateByPlayerId
+import com.eggtargaryen.bf2042state.api.getPlayerStateByPlayerName
 import com.eggtargaryen.bf2042state.component.About
 import com.eggtargaryen.bf2042state.component.CustomSnackBar
 import com.eggtargaryen.bf2042state.component.RoundOutlineTextField
@@ -60,6 +61,7 @@ fun LoginPage(
     var selectedPlatformText by remember { mutableStateOf("") }
     var selectedPlatform by remember { mutableStateOf("") }
     var loadingState by remember { mutableStateOf(false) }
+    var enableQueryEnhance by remember { mutableStateOf(false) }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -172,81 +174,128 @@ fun LoginPage(
                             loadingState = true
                             // Check if username and platform is empty
                             if (username.isNotEmpty() && selectedPlatform.isNotEmpty()) {
-                                getPlayerId(
-                                    username
-                                ).enqueue(object : Callback {
-                                    override fun onResponse(call: Call, response: Response) {
-                                        val playerIdRes = response.body?.string()
-                                        println(playerIdRes)
-                                        try {
-                                            val moshi = Moshi.Builder()
-                                                .add(KotlinJsonAdapterFactory())
-                                                .build()
-                                            val playerIdResAdapter =
-                                                moshi.adapter(PlayerId::class.java)
-                                            val playerIdResJson =
-                                                playerIdResAdapter.fromJson(playerIdRes)
-                                            playerId =
-                                                playerIdResJson?.results?.get(0)?.nucleusID
-                                                    ?: 0L
-                                            getPlayerState(
-                                                playerId,
-                                                selectedPlatform,
-                                            ).enqueue(object : Callback {
-                                                override fun onResponse(call: Call, response: Response) {
-                                                    val playerInfo = response.body?.string()
-                                                    try {
-                                                        val moshi = Moshi.Builder()
-                                                            .add(KotlinJsonAdapterFactory())
-                                                            .build()
-                                                        val playerInfoAdapter =
-                                                            moshi.adapter(PlayerInfo::class.java)
-                                                        val playerInfoJson =
-                                                            playerInfoAdapter.fromJson(playerInfo)
-                                                        playerInfoViewModel.postPlayerInfo(
-                                                            playerInfoJson!!
-                                                        )
-                                                        scope.launch { onNavToState() }
-                                                    } catch (e: Exception) {
-                                                        println(e)
+                                if (enableQueryEnhance) {
+                                    getPlayerId(
+                                        username
+                                    ).enqueue(object : Callback {
+                                        override fun onResponse(call: Call, response: Response) {
+                                            val playerIdRes = response.body?.string()
+                                            println(playerIdRes)
+                                            try {
+                                                val moshi = Moshi.Builder()
+                                                    .add(KotlinJsonAdapterFactory())
+                                                    .build()
+                                                val playerIdResAdapter =
+                                                    moshi.adapter(PlayerId::class.java)
+                                                val playerIdResJson =
+                                                    playerIdResAdapter.fromJson(playerIdRes)
+                                                playerId =
+                                                    playerIdResJson?.results?.get(0)?.nucleusID
+                                                        ?: 0L
+                                                getPlayerStateByPlayerId(
+                                                    playerId,
+                                                    selectedPlatform,
+                                                ).enqueue(object : Callback {
+                                                    override fun onResponse(
+                                                        call: Call,
+                                                        response: Response
+                                                    ) {
+                                                        val playerInfo = response.body?.string()
+                                                        try {
+                                                            val moshi = Moshi.Builder()
+                                                                .add(KotlinJsonAdapterFactory())
+                                                                .build()
+                                                            val playerInfoAdapter =
+                                                                moshi.adapter(PlayerInfo::class.java)
+                                                            val playerInfoJson =
+                                                                playerInfoAdapter.fromJson(playerInfo)
+                                                            playerInfoViewModel.postPlayerInfo(
+                                                                playerInfoJson!!
+                                                            )
+                                                            scope.launch { onNavToState() }
+                                                        } catch (e: Exception) {
+                                                            println(e)
+                                                            scope.launch {
+                                                                scaffoldState.snackbarHostState.showSnackbar(
+                                                                    "未找到该用户！"
+                                                                )
+                                                            }
+                                                        }
+                                                        loadingState = false
+                                                    }
+
+                                                    override fun onFailure(call: Call, e: IOException) {
                                                         scope.launch {
                                                             scaffoldState.snackbarHostState.showSnackbar(
-                                                                "未找到该用户！"
+                                                                "网络连接异常，请重试。"
                                                             )
                                                         }
+                                                        loadingState = false
                                                     }
-                                                    loadingState = false
+                                                })
+                                            } catch (e: Exception) {
+                                                loadingState = false
+                                                println(e)
+                                                scope.launch {
+                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                        "未找到该用户！"
+                                                    )
                                                 }
-
-                                                override fun onFailure(call: Call, e: IOException) {
-                                                    scope.launch {
-                                                        scaffoldState.snackbarHostState.showSnackbar(
-                                                            "网络连接异常，请重试。"
-                                                        )
-                                                    }
-                                                    loadingState = false
-                                                }
-                                            })
-                                        } catch (e: Exception) {
-                                            loadingState = false
-                                            println(e)
-                                            scope.launch {
-                                                scaffoldState.snackbarHostState.showSnackbar(
-                                                    "未找到该用户！"
-                                                )
                                             }
                                         }
-                                    }
 
-                                    override fun onFailure(call: Call, e: IOException) {
-                                        scope.launch {
-                                            scaffoldState.snackbarHostState.showSnackbar(
-                                                "网络连接异常，请重试。"
-                                            )
+                                        override fun onFailure(call: Call, e: IOException) {
+                                            scope.launch {
+                                                scaffoldState.snackbarHostState.showSnackbar(
+                                                    "网络连接异常，请重试。"
+                                                )
+                                            }
+                                            loadingState = false
                                         }
-                                        loadingState = false
-                                    }
-                                })
+                                    })
+                                } else {
+                                    getPlayerStateByPlayerName(
+                                        username,
+                                        selectedPlatform,
+                                    ).enqueue(object : Callback {
+                                        override fun onResponse(
+                                            call: Call,
+                                            response: Response
+                                        ) {
+                                            val playerInfo = response.body?.string()
+                                            try {
+                                                val moshi = Moshi.Builder()
+                                                    .add(KotlinJsonAdapterFactory())
+                                                    .build()
+                                                val playerInfoAdapter =
+                                                    moshi.adapter(PlayerInfo::class.java)
+                                                val playerInfoJson =
+                                                    playerInfoAdapter.fromJson(playerInfo)
+                                                playerInfoViewModel.postPlayerInfo(
+                                                    playerInfoJson!!
+                                                )
+                                                scope.launch { onNavToState() }
+                                            } catch (e: Exception) {
+                                                println(e)
+                                                scope.launch {
+                                                    scaffoldState.snackbarHostState.showSnackbar(
+                                                        "未找到该用户！可以尝试开启增强查询"
+                                                    )
+                                                }
+                                            }
+                                            loadingState = false
+                                        }
+
+                                        override fun onFailure(call: Call, e: IOException) {
+                                            scope.launch {
+                                                scaffoldState.snackbarHostState.showSnackbar(
+                                                    "网络连接异常，请重试。"
+                                                )
+                                            }
+                                            loadingState = false
+                                        }
+                                    })
+                                }
                             } else {
                                 scope.launch {
                                     scaffoldState.snackbarHostState.showSnackbar(
@@ -297,29 +346,29 @@ fun LoginPage(
                             }
                         }
                     }
-//                    Spacer(modifier = Modifier.height(12.dp))
-//                    Column(
-//                        modifier = Modifier.fillMaxWidth(),
-//                        verticalArrangement = Arrangement.Center,
-//                        horizontalAlignment = Alignment.Start
-//                    ) {
-//                        Text(
-//                            text = stringResource(id = R.string.login_query_history),
-//                            style = MaterialTheme.typography.body2,
-//                            color = MaterialTheme.colors.secondary,
-//                            maxLines = 1
-//                        )
-//                        Spacer(modifier = Modifier.height(2.dp))
-//                        FlowRow(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            mainAxisSpacing = 2.dp,
-//                            crossAxisSpacing = 2.dp,
-//                            mainAxisAlignment = FlowMainAxisAlignment.Start,
-//                            crossAxisAlignment = FlowCrossAxisAlignment.Center,
-//                            lastLineMainAxisAlignment = FlowMainAxisAlignment.Start
-//                        ) {
-//                        }
-//                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Switch(
+                            checked = enableQueryEnhance,
+                            onCheckedChange = { enableQueryEnhance = it },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = MaterialTheme.colors.primary,
+                                checkedTrackColor = MaterialTheme.colors.primary.copy(alpha = 0.32f),
+                                uncheckedThumbColor = MaterialTheme.colors.background,
+                                uncheckedTrackColor = MaterialTheme.colors.background.copy(alpha = 0.32f),
+                            )
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(id = R.string.login_query_enable),
+                            style = MaterialTheme.typography.body2,
+                        )
+                        Spacer(modifier = Modifier.width(2.dp))
+                    }
                 }
             }
         },

@@ -15,7 +15,7 @@ fun getPlayerId(
 }
 
 
-fun getPlayerState(
+fun getPlayerStateByPlayerId(
     playerId: Long,
     platform: String,
     formatValues: Boolean = false,
@@ -24,6 +24,20 @@ fun getPlayerState(
     val baseApi = RequestBuilder()
     baseApi.urls =
         "/bf2042/stats/?raw=false&format_values=$formatValues&nucleus_id=$playerId&platform=$platform&skip_battlelog=$skipBattleLog"
+    baseApi.method = "GET"
+    baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
+    return baseApi.request()
+}
+
+fun getPlayerStateByPlayerName(
+    playerName: String,
+    platform: String,
+    formatValues: Boolean = false,
+    skipBattleLog: Boolean = false
+): Call {
+    val baseApi = RequestBuilder()
+    baseApi.urls =
+        "/bf2042/stats/?raw=false&format_values=$formatValues&name=$playerName&platform=$platform&skip_battlelog=$skipBattleLog"
     baseApi.method = "GET"
     baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
     return baseApi.request()

@@ -7,6 +7,8 @@
     <string name="login_label_about">关于</string>
     <string name="login_label_update">检查更新</string>
     <string name="login_snackbar_empty_error">用户名或平台不能为空！</string>
+    <string name="login_query_enable">启用增强查询</string>
+    <string name="login_query_enable_dis">如果不启用增强查询时出现无法查询到用户的问题，可以尝试启用增强查询，实际查询时会先搜索玩家ID，然后再根据玩家ID查询战绩</string>
     <string name="login_query_history">查询历史</string>
 
     <string name="about_content">这是一个简陋的战地2042战绩查询应用，由EggTargaryen (橘子ID: Xx__Koraidon__xX) 开发，第一次用Jetpack Compose，能用就行能用就行。特别感谢gametools.network公开API；BFBan查询使用其公开接口，本应用不对此结果负责，如有疑问请自行解决，喷我没有用捏 :P 。使用过程中遇到任何问题可以去项目Github页面提issue，但个人精力有限不一定都能解决~</string>
