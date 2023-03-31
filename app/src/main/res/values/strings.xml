@@ -16,7 +16,7 @@
     <string name="about_jetpack_compose">Jetpack Compose</string>
     <string name="about_api_from">API from </string>
     <string name="about_gametools">gametools.network</string>
-    <string name="about_version">1.0.3</string>
+    <string name="about_version">1.0.4</string>
     <string name="about_copyright"> | Copyright</string>
 
     <string name="state_back">返回</string>
