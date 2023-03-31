@@ -63,7 +63,8 @@ fun LoginPage(
     var playerNameSelectorExpanded by remember { mutableStateOf(false) }
     var selectedPlatformText by remember { mutableStateOf("") }
     var selectedPlatform by remember { mutableStateOf("") }
-    var loadingState by remember { mutableStateOf(false) }
+    var queryBtnLoadingState by remember { mutableStateOf(false) }
+    var searchTextFieldLoadingState by remember { mutableStateOf(false) }
     var enableQueryEnhance by remember { mutableStateOf(false) }
     var queryList by remember { mutableStateOf(PlayerQueryList()) }
 
@@ -168,10 +169,12 @@ fun LoginPage(
                             playerNameSelectorExpanded = !playerNameSelectorExpanded
                         },
                     ) {
-                        RoundOutlineTextField(value = username,
+                        RoundOutlineTextField(
+                            value = username,
                             onValueChange = {
                                 username = it
                                 if (selectedPlatform.isNotEmpty() && it.isNotEmpty()) {
+                                    searchTextFieldLoadingState = true
                                     searchPlayerByName(
                                         username,
                                         selectedPlatform
@@ -188,13 +191,18 @@ fun LoginPage(
                                                         .fromJson(playerQueryList!!)
                                                 if (playerQueryListJson?.results != null && playerQueryListJson.results.isNotEmpty()) {
                                                     queryList = playerQueryListJson
+                                                    playerNameSelectorExpanded = true
                                                 }
+                                                searchTextFieldLoadingState = false
                                             } catch (e: Exception) {
+                                                searchTextFieldLoadingState = false
                                                 println(e)
                                             }
                                         }
 
-                                        override fun onFailure(call: Call, e: IOException) {}
+                                        override fun onFailure(call: Call, e: IOException) {
+                                            searchTextFieldLoadingState = false
+                                        }
                                     })
                                 }
                             },
@@ -205,7 +213,17 @@ fun LoginPage(
                                     contentDescription = stringResource(id = R.string.login_label_username),
                                     tint = MaterialTheme.colors.primary
                                 )
-                            })
+                            },
+                            trailingIcon = {
+                                if (searchTextFieldLoadingState) {
+                                    CircularProgressIndicator(
+                                        color = MaterialTheme.colors.primary,
+                                        modifier = Modifier.size(16.dp),
+                                        strokeWidth = 2.dp
+                                    )
+                                }
+                            },
+                        )
                         if (queryList.results != null && queryList.results!!.isNotEmpty()) {
                             ExposedDropdownMenu(
                                 expanded = playerNameSelectorExpanded,
@@ -227,7 +245,7 @@ fun LoginPage(
                     Spacer(modifier = Modifier.height(12.dp))
                     Button(
                         onClick = {
-                            loadingState = true
+                            queryBtnLoadingState = true
                             // Check if username and platform is empty
                             if (username.isNotEmpty() && selectedPlatform.isNotEmpty()) {
                                 if (enableQueryEnhance) {
@@ -279,7 +297,7 @@ fun LoginPage(
                                                                 )
                                                             }
                                                         }
-                                                        loadingState = false
+                                                        queryBtnLoadingState = false
                                                     }
 
                                                     override fun onFailure(
@@ -291,11 +309,11 @@ fun LoginPage(
                                                                 "网络连接异常，请重试。"
                                                             )
                                                         }
-                                                        loadingState = false
+                                                        queryBtnLoadingState = false
                                                     }
                                                 })
                                             } catch (e: Exception) {
-                                                loadingState = false
+                                                queryBtnLoadingState = false
                                                 println(e)
                                                 scope.launch {
                                                     scaffoldState.snackbarHostState.showSnackbar(
@@ -311,7 +329,7 @@ fun LoginPage(
                                                     "网络连接异常，请重试。"
                                                 )
                                             }
-                                            loadingState = false
+                                            queryBtnLoadingState = false
                                         }
                                     })
                                 } else {
@@ -344,7 +362,7 @@ fun LoginPage(
                                                     )
                                                 }
                                             }
-                                            loadingState = false
+                                            queryBtnLoadingState = false
                                         }
 
                                         override fun onFailure(call: Call, e: IOException) {
@@ -353,7 +371,7 @@ fun LoginPage(
                                                     "网络连接异常，请重试。"
                                                 )
                                             }
-                                            loadingState = false
+                                            queryBtnLoadingState = false
                                         }
                                     })
                                 }
@@ -363,7 +381,7 @@ fun LoginPage(
                                         "用户名或平台不能为空！"
                                     )
                                 }
-                                loadingState = false
+                                queryBtnLoadingState = false
                             }
                         },
                         shape = RoundedCornerShape(50),
@@ -375,9 +393,9 @@ fun LoginPage(
                             contentColor = MaterialTheme.colors.background,
                             disabledBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.32f)
                         ),
-                        enabled = !loadingState
+                        enabled = !queryBtnLoadingState
                     ) {
-                        Crossfade(targetState = loadingState) { loading ->
+                        Crossfade(targetState = queryBtnLoadingState) { loading ->
                             when (loading) {
                                 true -> Row(
                                     modifier = Modifier.fillMaxWidth(),
