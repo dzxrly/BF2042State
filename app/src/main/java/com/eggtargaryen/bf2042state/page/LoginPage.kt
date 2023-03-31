@@ -21,6 +21,7 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.api.getPlayerId
 import com.eggtargaryen.bf2042state.api.getPlayerStateByPlayerId
 import com.eggtargaryen.bf2042state.api.getPlayerStateByPlayerName
+import com.eggtargaryen.bf2042state.api.searchPlayerByName
 import com.eggtargaryen.bf2042state.component.About
 import com.eggtargaryen.bf2042state.component.CustomSnackBar
 import com.eggtargaryen.bf2042state.component.RoundOutlineTextField
@@ -28,6 +29,7 @@ import com.eggtargaryen.bf2042state.component.SnackBarType
 import com.eggtargaryen.bf2042state.model.PlayerId
 import com.eggtargaryen.bf2042state.model.PlayerInfo
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.model.PlayerQueryList
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -57,11 +59,13 @@ fun LoginPage(
 
     var username by remember { mutableStateOf("") }
     var playerId by remember { mutableStateOf(0L) }
-    var expanded by remember { mutableStateOf(false) }
+    var platformSelectorExpanded by remember { mutableStateOf(false) }
+    var playerNameSelectorExpanded by remember { mutableStateOf(false) }
     var selectedPlatformText by remember { mutableStateOf("") }
     var selectedPlatform by remember { mutableStateOf("") }
     var loadingState by remember { mutableStateOf(false) }
     var enableQueryEnhance by remember { mutableStateOf(false) }
+    var queryList by remember { mutableStateOf(PlayerQueryList()) }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -117,8 +121,8 @@ fun LoginPage(
                     }
                     Spacer(modifier = Modifier.height(12.dp))
                     ExposedDropdownMenuBox(
-                        expanded = expanded,
-                        onExpandedChange = { expanded = !expanded },
+                        expanded = platformSelectorExpanded,
+                        onExpandedChange = { platformSelectorExpanded = !platformSelectorExpanded },
                     ) {
                         RoundOutlineTextField(
                             value = selectedPlatformText,
@@ -126,7 +130,7 @@ fun LoginPage(
                             label = { Text(stringResource(id = R.string.login_label_platform)) },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(
-                                    expanded = expanded
+                                    expanded = platformSelectorExpanded
                                 )
                             },
                             leadingIcon = {
@@ -139,9 +143,9 @@ fun LoginPage(
                             readOnly = true,
                         )
                         ExposedDropdownMenu(
-                            expanded = expanded,
+                            expanded = platformSelectorExpanded,
                             onDismissRequest = {
-                                expanded = false
+                                platformSelectorExpanded = false
                             },
                             modifier = Modifier
                                 .background(color = MaterialTheme.colors.onSecondary)
@@ -150,7 +154,7 @@ fun LoginPage(
                                 DropdownMenuItem(onClick = {
                                     selectedPlatformText = selectionOption
                                     selectedPlatform = platformValOptions[platformIndex]
-                                    expanded = false
+                                    platformSelectorExpanded = false
                                 }) {
                                     Text(text = selectionOption)
                                 }
@@ -158,16 +162,68 @@ fun LoginPage(
                         }
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    RoundOutlineTextField(value = username,
-                        onValueChange = { username = it },
-                        label = { Text(text = stringResource(id = R.string.login_label_username)) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.Person,
-                                contentDescription = stringResource(id = R.string.login_label_username),
-                                tint = MaterialTheme.colors.primary
-                            )
-                        })
+                    ExposedDropdownMenuBox(
+                        expanded = playerNameSelectorExpanded,
+                        onExpandedChange = {
+                            playerNameSelectorExpanded = !playerNameSelectorExpanded
+                        },
+                    ) {
+                        RoundOutlineTextField(value = username,
+                            onValueChange = {
+                                username = it
+                                if (selectedPlatform.isNotEmpty() && it.isNotEmpty()) {
+                                    searchPlayerByName(
+                                        username,
+                                        selectedPlatform
+                                    ).enqueue(object : Callback {
+                                        override fun onResponse(call: Call, response: Response) {
+                                            val playerQueryList = response.body?.string()
+                                            println(playerQueryList)
+                                            try {
+                                                val moshi = Moshi.Builder()
+                                                    .add(KotlinJsonAdapterFactory())
+                                                    .build()
+                                                val playerQueryListJson =
+                                                    moshi.adapter(PlayerQueryList::class.java)
+                                                        .fromJson(playerQueryList!!)
+                                                if (playerQueryListJson?.results != null && playerQueryListJson.results.isNotEmpty()) {
+                                                    queryList = playerQueryListJson
+                                                }
+                                            } catch (e: Exception) {
+                                                println(e)
+                                            }
+                                        }
+
+                                        override fun onFailure(call: Call, e: IOException) {}
+                                    })
+                                }
+                            },
+                            label = { Text(text = stringResource(id = R.string.login_label_username)) },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Rounded.Person,
+                                    contentDescription = stringResource(id = R.string.login_label_username),
+                                    tint = MaterialTheme.colors.primary
+                                )
+                            })
+                        if (queryList.results != null && queryList.results!!.isNotEmpty()) {
+                            ExposedDropdownMenu(
+                                expanded = playerNameSelectorExpanded,
+                                onDismissRequest = { playerNameSelectorExpanded = false },
+                                modifier = Modifier
+                                    .background(color = MaterialTheme.colors.onSecondary)
+                            ) {
+                                queryList.results?.forEach { player ->
+                                    DropdownMenuItem(onClick = {
+                                        username = player.name.toString()
+                                        playerNameSelectorExpanded = false
+                                    }) {
+                                        player.name?.let { Text(text = it) }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     Spacer(modifier = Modifier.height(12.dp))
                     Button(
                         onClick = {
@@ -208,7 +264,9 @@ fun LoginPage(
                                                             val playerInfoAdapter =
                                                                 moshi.adapter(PlayerInfo::class.java)
                                                             val playerInfoJson =
-                                                                playerInfoAdapter.fromJson(playerInfo)
+                                                                playerInfoAdapter.fromJson(
+                                                                    playerInfo
+                                                                )
                                                             playerInfoViewModel.postPlayerInfo(
                                                                 playerInfoJson!!
                                                             )
@@ -224,7 +282,10 @@ fun LoginPage(
                                                         loadingState = false
                                                     }
 
-                                                    override fun onFailure(call: Call, e: IOException) {
+                                                    override fun onFailure(
+                                                        call: Call,
+                                                        e: IOException
+                                                    ) {
                                                         scope.launch {
                                                             scaffoldState.snackbarHostState.showSnackbar(
                                                                 "网络连接异常，请重试。"

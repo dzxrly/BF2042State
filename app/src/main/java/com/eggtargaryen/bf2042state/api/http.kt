@@ -7,6 +7,7 @@ import okio.IOException
 object BF2042StateBaseApi {
     val devMode = false
     val baseApi = "https://api.gametools.network"
+    val feslApi = "https://fesl.gametools.network"
     val baseDevApi = "http://127.0.0.1:4523/m1/2353382-0-default"
     val timeout = 30000  // 30s
 }
@@ -18,13 +19,10 @@ class RequestBuilder : Callback {
     var timeout: Long = 30000
     var success: ((Response) -> Unit)? = null
     var faild: ((Throwable) -> Unit)? = null
+    var baseApi: String = BF2042StateBaseApi.baseApi
 
     private fun urlBuilder(extendUrl: String): String {
-        return if (BF2042StateBaseApi.devMode) {
-            BF2042StateBaseApi.baseDevApi + extendUrl
-        } else {
-            BF2042StateBaseApi.baseApi + extendUrl
-        }
+        return baseApi + extendUrl
     }
 
     fun onSuccess(onSuccess: (Response) -> Unit) {

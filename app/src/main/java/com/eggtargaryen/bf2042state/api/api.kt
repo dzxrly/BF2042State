@@ -4,6 +4,18 @@ import okhttp3.Call
 import okhttp3.RequestBody.Companion.toRequestBody
 
 
+fun searchPlayerByName(
+    playerNameKeyword: String,
+    platform: String
+): Call {
+    val baseApi = RequestBuilder()
+    baseApi.baseApi = BF2042StateBaseApi.feslApi
+    baseApi.urls = "/persona/$platform/search-name/$playerNameKeyword*"
+    baseApi.method = "GET"
+    baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
+    return baseApi.request()
+}
+
 fun getPlayerId(
     playerName: String
 ): Call {
