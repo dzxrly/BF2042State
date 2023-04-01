@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun StatePage(
     onNavToLogin: () -> Unit = {},
-    playerInfoViewModel: PlayerInfoViewModel
+    playerInfoViewModel: PlayerInfoViewModel,
 ) {
     val playerInfo = playerInfoViewModel.getPlayerInfo()
     val scaffoldState = rememberScaffoldState()
@@ -235,43 +235,43 @@ fun PlayerBaseDataCard(
             ) {
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kd),
-                    data = playerInfo?.infantryKillDeath.toString() ?: "0.0"
+                    data = playerInfo?.infantryKillDeath.toString()
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kpm),
-                    data = playerInfo?.killsPerMinute.toString() ?: "0.0"
+                    data = playerInfo?.killsPerMinute.toString()
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_dpm),
-                    data = playerInfo?.damagePerMinute.toString() ?: "0.0"
+                    data = playerInfo?.damagePerMinute.toString()
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_win_rate),
-                    data = playerInfo?.winPercent ?: "0.0%"
+                    data = (playerInfo?.winPercent ?: "0.0") + "%"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_hs_rate),
-                    data = playerInfo?.headshots ?: "0.0%"
+                    data = (playerInfo?.headshots ?: "0.0") + "%"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_acc),
-                    data = playerInfo?.accuracy ?: "0.0%"
+                    data = (playerInfo?.accuracy ?: "0.0") + "%"
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kills),
-                    data = playerInfo?.kills.toString() ?: "0"
+                    data = playerInfo?.kills.toString()
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_dpM),
-                    data = playerInfo?.damagePerMatch.toString() ?: "0.0"
+                    data = playerInfo?.damagePerMatch.toString()
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kpM),
-                    data = playerInfo?.killsPerMatch.toString() ?: "0.0"
+                    data = playerInfo?.killsPerMatch.toString()
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_M),
-                    data = playerInfo?.matchesPlayed.toString() ?: "0"
+                    data = playerInfo?.matchesPlayed.toString()
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_best_class),

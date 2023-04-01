@@ -9,6 +9,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.model.UpdateInfoViewModel
 import com.eggtargaryen.bf2042state.page.LoginPage
 import com.eggtargaryen.bf2042state.page.StatePage
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -32,6 +33,7 @@ fun AppNavigation(
     val navController = rememberAnimatedNavController()
     // PlayerInfoViewModel is a ViewModel that stores the player info
     val playerInfoViewModel = viewModel<PlayerInfoViewModel>()
+    val updateInfoViewModel = viewModel<UpdateInfoViewModel>()
 
     AnimatedNavHost(
         navController = navController,
@@ -66,7 +68,8 @@ fun AppNavigation(
                 onNavToState = {
                     navController.navigate(Destinations.STATE)
                 },
-                playerInfoViewModel = playerInfoViewModel
+                playerInfoViewModel = playerInfoViewModel,
+                updateInfoViewModel = updateInfoViewModel
             )
         }
         composable(Destinations.STATE) {

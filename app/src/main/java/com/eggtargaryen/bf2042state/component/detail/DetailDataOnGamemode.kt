@@ -127,7 +127,7 @@ fun GamemodeDataDetailListItem(
                 )
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = gamemodeItem.winPercent ?: "0.0%",
+                    text = (gamemodeItem.winPercent ?: "0.0") + "%",
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center

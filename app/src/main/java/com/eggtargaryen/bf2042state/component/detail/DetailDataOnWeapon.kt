@@ -154,11 +154,11 @@ fun WeaponDataDetailListItem(
                     label_left = stringResource(id = R.string.state_detail_list_kpm),
                     data_left = weaponItem.killsPerMinute.toString(),
                     label_right = stringResource(id = R.string.state_detail_list_hsr),
-                    data_right = weaponItem.headshots ?: "0.0%"
+                    data_right = (weaponItem.headshots ?: "0.0") + "%"
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_accuracy),
-                    data_left = weaponItem.accuracy ?: "0.0%",
+                    data_left = (weaponItem.accuracy ?: "0.0") + "%",
                     stringResource(id = R.string.state_detail_list_dpm),
                     weaponItem.damagePerMinute.toString()
                 )

@@ -99,7 +99,7 @@ fun DetailDataOnMap(
                         )
                         Text(
                             modifier = Modifier.weight(0.25f),
-                            text = mapData.winPercent ?: "0.0%",
+                            text = (mapData.winPercent ?: "0.0") + "%",
                             color = MaterialTheme.colors.primary,
                             style = MaterialTheme.typography.body1,
                             textAlign = TextAlign.Center

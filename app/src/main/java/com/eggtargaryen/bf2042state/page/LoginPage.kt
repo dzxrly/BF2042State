@@ -39,7 +39,8 @@ import okio.IOException
 @Composable
 fun LoginPage(
     onNavToState: () -> Unit = {},
-    playerInfoViewModel: PlayerInfoViewModel
+    playerInfoViewModel: PlayerInfoViewModel,
+    updateInfoViewModel: UpdateInfoViewModel
 ) {
     val cacheLimitation = 6
     val platformLabelOptions =
@@ -518,7 +519,10 @@ fun LoginPage(
                         }
 
                     }
-                    UpdateButton(scaffoldState = scaffoldState)
+                    UpdateButton(
+                        scaffoldState = scaffoldState,
+                        updateInfoViewModel = updateInfoViewModel
+                    )
                 }
             }
         },
