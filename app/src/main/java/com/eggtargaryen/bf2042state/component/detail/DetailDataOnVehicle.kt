@@ -15,6 +15,7 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.TwoColumnBaseBadge
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.model.Vehicle
+import com.eggtargaryen.bf2042state.utils.numberFormat
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import dev.esteki.expandable.Expandable
 
@@ -152,7 +153,7 @@ fun VehicleDataDetailListItem(
                     label_left = stringResource(id = R.string.state_detail_list_kpm),
                     data_left = vehicleData.killsPerMinute.toString(),
                     label_right = stringResource(id = R.string.state_detail_list_dmg),
-                    data_right = vehicleData.damage.toString()
+                    data_right = numberFormat(vehicleData.damage ?: 0L)
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_be_driver_assists),
@@ -168,7 +169,7 @@ fun VehicleDataDetailListItem(
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_dis),
-                    data_left = vehicleData.distanceTraveled.toString(),
+                    data_left = numberFormat(vehicleData.distanceTraveled ?: 0L),
                     label_right = stringResource(id = R.string.state_detail_list_be_road_kill),
                     data_right = vehicleData.roadKills.toString()
                 )

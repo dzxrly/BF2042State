@@ -6,7 +6,7 @@
     <string name="login_label_search_btn">查询</string>
     <string name="login_label_about">关于</string>
     <string name="login_label_version">版本</string>
-    <string name="login_label_update">发现新版本</string>
+    <string name="login_label_update">发现新版本，点击下载</string>
     <string name="login_snackbar_empty_error">用户名或平台不能为空！</string>
     <string name="login_query_enable">启用增强查询</string>
     <string name="login_query_enable_dis">如果不启用增强查询时出现无法查询到用户的问题，可以尝试启用增强查询，实际查询时会先搜索玩家ID，然后再根据玩家ID查询战绩</string>
@@ -28,7 +28,7 @@
     <string name="state_tab_gadget">装备</string>
     <string name="state_tab_map">地图</string>
     <string name="state_tab_mode">模式</string>
-    <string name="state_base_data_card_kd">K/D</string>
+    <string name="state_base_data_card_kd">真实K/D</string>
     <string name="state_base_data_card_kpm">KPM</string>
     <string name="state_base_data_card_dpm">DPM</string>
     <string name="state_base_data_card_win_rate">胜率</string>
@@ -54,7 +54,7 @@
     <string name="state_bfban_info_status_7">null</string>
     <string name="state_bfban_info_status_8">刷枪</string>
 
-    <string name="state_detail_data_on_foot_kills">击杀数量</string>
+    <string name="state_detail_data_on_foot_kills">击杀数量 (含AI)</string>
     <string name="state_detail_data_on_foot_death">死亡次数</string>
     <string name="state_detail_data_on_foot_assist">助攻次数</string>
     <string name="state_detail_data_on_foot_mvp">MVP数量</string>
@@ -111,4 +111,24 @@
     <string name="state_map_mode_list_objective_defend">防守目标</string>
     <string name="state_map_mode_list_objective_capture">占领目标</string>
     <string name="state_map_mode_list_objective_time">占点时长</string>
+
+    <string name="character_name_translation_Mackay">麦凯</string>
+    <string name="character_name_translation_Irish">爱尔兰佬</string>
+    <string name="character_name_translation_Sundance">日舞</string>
+    <string name="character_name_translation_Dozer">推土机</string>
+    <string name="character_name_translation_Paik">白智秀</string>
+    <string name="character_name_translation_Falck">法尔克</string>
+    <string name="character_name_translation_Angel">天使</string>
+    <string name="character_name_translation_Boris">鲍里斯</string>
+    <string name="character_name_translation_Casper">卡斯帕</string>
+    <string name="character_name_translation_Rao">拉奥</string>
+    <string name="character_name_translation_Lis">莉丝</string>
+    <string name="character_name_translation_Crawford">克劳福德</string>
+    <string name="character_name_translation_Zain">扎因</string>
+    <string name="character_name_translation_Blasco">布拉斯科</string>
+
+    <string name="classes_name_translation_Assault">突击兵</string>
+    <string name="classes_name_translation_Recon">侦察兵</string>
+    <string name="classes_name_translation_Support">支援兵</string>
+    <string name="classes_name_translation_Engineer">工程兵</string>
 </resources>

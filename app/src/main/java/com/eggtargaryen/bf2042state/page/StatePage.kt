@@ -26,6 +26,7 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.*
 import com.eggtargaryen.bf2042state.component.detail.*
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.utils.characterNameENGToCHN
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -275,7 +276,7 @@ fun PlayerBaseDataCard(
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_best_class),
-                    data = playerInfo?.bestClass ?: "Unknown"
+                    data = characterNameENGToCHN(playerInfo?.bestClass ?: "Unknown")
                 )
             }
         }

@@ -15,6 +15,7 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.TwoColumnBaseBadge
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.model.Weapon
+import com.eggtargaryen.bf2042state.utils.numberFormat
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import dev.esteki.expandable.Expandable
 
@@ -151,28 +152,26 @@ fun WeaponDataDetailListItem(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TwoColumnBaseBadge(
-                    label_left = stringResource(id = R.string.state_detail_list_kpm),
-                    data_left = weaponItem.killsPerMinute.toString(),
+                    stringResource(id = R.string.state_detail_list_dpm),
+                    weaponItem.damagePerMinute.toString(),
                     label_right = stringResource(id = R.string.state_detail_list_hsr),
                     data_right = (weaponItem.headshots ?: "0.0") + "%"
                 )
                 TwoColumnBaseBadge(
-                    label_left = stringResource(id = R.string.state_detail_list_accuracy),
-                    data_left = (weaponItem.accuracy ?: "0.0") + "%",
-                    stringResource(id = R.string.state_detail_list_dpm),
-                    weaponItem.damagePerMinute.toString()
-                )
-                TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_dmg),
-                    data_left = weaponItem.damage.toString(),
+                    data_left = numberFormat(weaponItem.damage ?: 0L),
                     label_right = stringResource(id = R.string.state_detail_list_be_multi_kills),
                     data_right = weaponItem.multiKills.toString()
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_shot_count),
-                    data_left = weaponItem.shotsFired.toString(),
+                    data_left = numberFormat(weaponItem.shotsFired ?: 0L),
                     label_right = stringResource(id = R.string.state_detail_list_hit_count),
-                    data_right = weaponItem.shotsHit.toString()
+                    data_right = numberFormat(weaponItem.shotsHit ?: 0L)
+                )
+                TwoColumnBaseBadge(
+                    label_left = stringResource(id = R.string.state_detail_list_accuracy),
+                    data_left = (weaponItem.accuracy ?: "0.0") + "%",
                 )
             }
         }

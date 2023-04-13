@@ -15,6 +15,7 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.TwoColumnBaseBadge
 import com.eggtargaryen.bf2042state.model.Gadget
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.utils.numberFormat
 import dev.esteki.expandable.Expandable
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -154,7 +155,7 @@ fun GadgetDataDetailListItem(
                 )
                 TwoColumnBaseBadge(
                     label_left = stringResource(id = R.string.state_detail_list_dmg),
-                    data_left = gadgetItem.damage.toString(),
+                    data_left = numberFormat(gadgetItem.damage ?: 0L),
                     stringResource(id = R.string.state_detail_list_be_multi_kills),
                     gadgetItem.multiKills.toString()
                 )

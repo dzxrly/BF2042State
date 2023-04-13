@@ -15,6 +15,8 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.TwoColumnBaseBadge
 import com.eggtargaryen.bf2042state.model.ClassElement
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.utils.characterNameENGToCHN
+import com.eggtargaryen.bf2042state.utils.classesNameENGToCHN
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import dev.esteki.expandable.Expandable
 
@@ -112,7 +114,7 @@ fun ClassDataDetailListItem(
             ) {
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = classItem.characterName ?: "Unknown",
+                    text = characterNameENGToCHN(classItem.characterName ?: "Unknown"),
                     color = MaterialTheme.colors.secondary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Start
@@ -149,14 +151,10 @@ fun ClassDataDetailListItem(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TwoColumnBaseBadge(
-                    label_left = stringResource(id = R.string.state_detail_list_kpm),
-                    data_left = classItem.kpm.toString(),
+                    label_left = stringResource(id = R.string.state_detail_list_class_type),
+                    data_left = classesNameENGToCHN(classItem.className ?: "Unknown"),
                     label_right = stringResource(id = R.string.state_detail_list_kd),
                     data_right = classItem.killDeath.toString()
-                )
-                TwoColumnBaseBadge(
-                    label_left = stringResource(id = R.string.state_detail_list_class_type),
-                    data_left = classItem.className ?: "Unknown"
                 )
             }
         }
