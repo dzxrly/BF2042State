@@ -43,7 +43,7 @@ data class PlayerInfo(
     val matchesPlayed: Long? = 0L,
     val mvp: Long? = 0L,
     val objective: PlayerInfoObjective? = null,
-    val playerTakeDowns: List<Long>? = null,
+    val playerTakeDowns: Long? = 0L,
     val repairs: Long? = 0L,
     val resupplies: Long? = 0L,
     val revives: Long? = 0L,

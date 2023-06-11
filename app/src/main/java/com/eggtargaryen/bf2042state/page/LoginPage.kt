@@ -377,7 +377,6 @@ fun LoginPage(
                                                     queryHistoryList = queryHistoryList.drop(1)
                                                 }
                                                 if (!queryHistoryList.contains(playerInfoJson.userName)) {
-                                                    println(queryHistoryList.size)
                                                     queryHistory =
                                                         if (queryHistoryList.isNotEmpty()) {
                                                             queryHistoryList.plus(playerInfoJson.userName)
