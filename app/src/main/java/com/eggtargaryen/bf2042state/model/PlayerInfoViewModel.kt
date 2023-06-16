@@ -13,6 +13,8 @@ class PlayerInfoViewModel : ViewModel() {
         playerInfo.vehicles = playerInfo.vehicles?.sortedByDescending { it.kills }
         playerInfo.classes = playerInfo.classes?.sortedByDescending { it.kills }
         playerInfo.gadgets = playerInfo.gadgets?.sortedByDescending { it.kills }
+        playerInfo.gamemodes = playerInfo.gamemodes?.sortedByDescending { it.secondsPlayed }
+        playerInfo.maps = playerInfo.maps?.sortedByDescending { it.secondsPlayed }
         return playerInfo
     }
 
