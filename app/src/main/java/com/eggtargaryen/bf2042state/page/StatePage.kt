@@ -68,7 +68,7 @@ fun StatePage(
                             AsyncImage(
                                 modifier = Modifier
                                     .size(32.dp)
-                                    .clip(MaterialTheme.shapes.large),
+                                    .clip(MaterialTheme.shapes.small),
                                 model = ImageRequest.Builder(LocalContext.current)
                                     .data(playerInfo?.avatar ?: "#")
                                     .crossfade(true)
