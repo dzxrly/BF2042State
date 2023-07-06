@@ -8,7 +8,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -27,6 +26,7 @@ import com.eggtargaryen.bf2042state.component.*
 import com.eggtargaryen.bf2042state.component.detail.*
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.utils.characterNameENGToCHN
+import com.eggtargaryen.bf2042state.utils.getRealKills
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -68,14 +68,15 @@ fun StatePage(
                             AsyncImage(
                                 modifier = Modifier
                                     .size(32.dp)
-                                    .clip(CircleShape),
+                                    .clip(MaterialTheme.shapes.large),
                                 model = ImageRequest.Builder(LocalContext.current)
                                     .data(playerInfo?.avatar ?: "#")
                                     .crossfade(true)
                                     .build(),
                                 contentDescription = "User Avatar",
-                                placeholder = painterResource(id = R.drawable.round_account_box_24),
-                                contentScale = ContentScale.Crop,
+                                placeholder = painterResource(id = R.drawable.avatar_span),
+                                error = painterResource(id = R.drawable.avatar_span),
+                                contentScale = ContentScale.Inside,
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = playerInfo?.userName ?: "Unknown", maxLines = 1)
@@ -148,14 +149,15 @@ fun PlayerBaseInfoCard(
                 AsyncImage(
                     modifier = Modifier
                         .size(96.dp)
-                        .clip(CircleShape),
+                        .clip(MaterialTheme.shapes.large),
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(playerInfo?.avatar ?: "#")
                         .crossfade(true)
                         .build(),
                     contentDescription = "User Avatar",
-                    placeholder = painterResource(id = R.drawable.round_account_box_24),
-                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(id = R.drawable.avatar_span),
+                    error = painterResource(id = R.drawable.avatar_span),
+                    contentScale = ContentScale.Inside,
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(
@@ -169,17 +171,30 @@ fun PlayerBaseInfoCard(
                         style = MaterialTheme.typography.h6,
                         maxLines = 1
                     )
-//                    Spacer(modifier = Modifier.height(2.dp))
-//                    Text(
-//                        text = "等级 Lv.$playerInfo.",
-//                        style = MaterialTheme.typography.body1,
-//                        color = MaterialTheme.colors.secondary,
-//                        maxLines = 1
-//                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.state_base_player_uid),
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.colors.secondary,
+                            maxLines = 1
+                        )
+                        Spacer(modifier = Modifier.size(2.dp))
+                        Text(
+                            text = playerInfo?.userId.toString(),
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.colors.secondary,
+                            maxLines = 1
+                        )
+                    }
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "${secondsToHours(playerInfo?.secondsPlayed ?: -1)}小时",
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.body2,
                         color = MaterialTheme.colors.secondary,
                         maxLines = 1
                     )
@@ -260,7 +275,10 @@ fun PlayerBaseDataCard(
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_kills),
-                    data = playerInfo?.kills.toString()
+                    data = getRealKills(
+                        playerInfo?.kills ?: 0L,
+                        playerInfo?.humanPrecentage ?: "0.0%"
+                    ).toString()
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_dpM),

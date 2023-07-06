@@ -1,6 +1,12 @@
 package com.eggtargaryen.bf2042state.component.detail
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
@@ -13,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.utils.getRealKills
 
 
 @Composable
@@ -61,6 +68,14 @@ fun DetailDataOnFoot(
             label = stringResource(id = R.string.state_detail_data_on_foot_kills),
             data = playerInfo?.kills.toString() ?: "0"
         )
+        DetailRow(
+            label = stringResource(id = R.string.state_base_data_card_kills),
+            data = getRealKills(
+                playerInfo?.kills ?: 0L,
+                playerInfo?.humanPrecentage ?: "0.0%"
+            ).toString()
+        )
+        Divider()
         Divider()
         DetailRow(
             label = stringResource(id = R.string.state_detail_data_on_foot_death),

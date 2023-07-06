@@ -34,11 +34,12 @@
     <string name="state_base_data_card_win_rate">胜率</string>
     <string name="state_base_data_card_hs_rate">爆头率</string>
     <string name="state_base_data_card_acc">准确度</string>
-    <string name="state_base_data_card_kills">击杀数</string>
+    <string name="state_base_data_card_kills">真实击杀数</string>
     <string name="state_base_data_card_dpM">场均伤害</string>
     <string name="state_base_data_card_kpM">场均击杀</string>
     <string name="state_base_data_card_M">游玩场数</string>
     <string name="state_base_data_best_class">最佳专家</string>
+    <string name="state_base_player_uid">UID: </string>
     <string name="state_base_data_bfban">BFBan查询结果: </string>
 
     <string name="state_bfban_info_loading">查询中...</string>

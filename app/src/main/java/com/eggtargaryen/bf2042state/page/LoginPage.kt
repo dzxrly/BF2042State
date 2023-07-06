@@ -437,6 +437,7 @@ fun LoginPage(
                                         strokeWidth = 3.dp,
                                     )
                                 }
+
                                 false -> Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically,

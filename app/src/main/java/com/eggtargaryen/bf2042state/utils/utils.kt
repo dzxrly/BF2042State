@@ -38,7 +38,8 @@ fun numberFormat(number: Long): String {
         numberDouble.toString()
     } else if (numberDouble < 1000000) {
         // keep 2 digits after decimal point
-        (numberDouble / 10000).toBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP).toString() + "万"
+        (numberDouble / 10000).toBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP)
+            .toString() + "万"
     } else if (numberDouble < 100000000) {
         (numberDouble / 1000000).toBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP)
             .toString() + "百万"
@@ -46,6 +47,12 @@ fun numberFormat(number: Long): String {
         (numberDouble / 100000000).toBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP)
             .toString() + "亿"
     }
+}
+
+fun getRealKills(totalKills: Long, humanPrecentage: String): Long {
+    // humanPrecentage is like "89.5%" or "89.5", convert to 0.895
+    val humanPrecentageDouble = humanPrecentage.replace("%", "").toDouble() / 100
+    return (totalKills * humanPrecentageDouble).toLong()
 }
 
 @Keep

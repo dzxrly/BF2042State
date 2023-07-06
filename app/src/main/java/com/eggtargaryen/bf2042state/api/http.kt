@@ -1,6 +1,11 @@
 package com.eggtargaryen.bf2042state.api
 
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import okio.IOException
 
 
@@ -49,6 +54,7 @@ class RequestBuilder : Callback {
             when (method) {
                 "post", "Post", "POST" -> Request.Builder().url(urlBuilder(urls)).post(body!!)
                     .build()
+
                 else -> Request.Builder().url(urlBuilder(urls)).build()
             }
         )
