@@ -68,6 +68,7 @@ fun DetailDataOnFoot(
             label = stringResource(id = R.string.state_detail_data_on_foot_kills),
             data = playerInfo?.kills.toString() ?: "0"
         )
+        Divider()
         DetailRow(
             label = stringResource(id = R.string.state_base_data_card_kills),
             data = getRealKills(
@@ -75,7 +76,6 @@ fun DetailDataOnFoot(
                 playerInfo?.humanPrecentage ?: "0.0%"
             ).toString()
         )
-        Divider()
         Divider()
         DetailRow(
             label = stringResource(id = R.string.state_detail_data_on_foot_death),
