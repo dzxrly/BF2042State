@@ -76,7 +76,7 @@ fun StatePage(
                                 contentDescription = "User Avatar",
                                 placeholder = painterResource(id = R.drawable.avatar_span),
                                 error = painterResource(id = R.drawable.avatar_span),
-                                contentScale = ContentScale.Inside,
+                                contentScale = ContentScale.Fit,
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = playerInfo?.userName ?: "Unknown", maxLines = 1)
@@ -157,7 +157,7 @@ fun PlayerBaseInfoCard(
                     contentDescription = "User Avatar",
                     placeholder = painterResource(id = R.drawable.avatar_span),
                     error = painterResource(id = R.drawable.avatar_span),
-                    contentScale = ContentScale.Inside,
+                    contentScale = ContentScale.Fit,
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(
