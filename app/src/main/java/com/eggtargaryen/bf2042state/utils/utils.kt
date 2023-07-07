@@ -9,8 +9,8 @@ import java.math.BigDecimal
 
 fun secondsToHours(seconds: Long, fixedDigits: Int = 2): Double {
     return if (seconds != -1L) {
-        (seconds.toDouble() / 3600.0).toBigDecimal()
-            .setScale(fixedDigits, BigDecimal.ROUND_HALF_UP).toDouble()
+        (seconds.toDouble() / 3600.0).toBigDecimal().setScale(fixedDigits, BigDecimal.ROUND_HALF_UP)
+            .toDouble()
     } else -1.0
 }
 
@@ -85,6 +85,32 @@ fun classesNameENGToCHN(name: String): String {
         "Engineer" -> stringResource(id = R.string.classes_name_translation_Engineer)
         "Support" -> stringResource(id = R.string.classes_name_translation_Support)
         "Recon" -> stringResource(id = R.string.classes_name_translation_Recon)
+        else -> name
+    }
+}
+
+@Keep
+@Composable
+fun mapNameENGToCHN(name: String): String {
+    return when (name) {
+        "Discarded" -> stringResource(id = R.string.map_name_translation_Discarded)
+        "Hourglass" -> stringResource(id = R.string.map_name_translation_Hourglass)
+        "Breakaway" -> stringResource(id = R.string.map_name_translation_Breakaway)
+        "Kaleidescope" -> stringResource(id = R.string.map_name_translation_Kaleidescope)
+        "Manifest" -> stringResource(id = R.string.map_name_translation_Manifest)
+        "Orbital" -> stringResource(id = R.string.map_name_translation_Orbital)
+        "Renewal" -> stringResource(id = R.string.map_name_translation_Renewal)
+        "Battle of the Bulge" -> stringResource(id = R.string.map_name_translation_Battle_of_the_Bulge)
+        "Arica Harbor" -> stringResource(id = R.string.map_name_translation_Arica_Harbor)
+        "Valparaiso" -> stringResource(id = R.string.map_name_translation_Valparaiso)
+        "El Alamein" -> stringResource(id = R.string.map_name_translation_El_Alamein)
+        "Noshahr Canals" -> stringResource(id = R.string.map_name_translation_Noshahr_Canals)
+        "Caspian Border" -> stringResource(id = R.string.map_name_translation_Caspian_Border)
+        "Exposure" -> stringResource(id = R.string.map_name_translation_Exposure)
+        "Stranded" -> stringResource(id = R.string.map_name_translation_Stranded)
+        "Spearhead" -> stringResource(id = R.string.map_name_translation_Spearhead)
+        "Flashpoint" -> stringResource(id = R.string.map_name_translation_Flashpoint)
+        "Reclaimed" -> stringResource(id = R.string.map_name_translation_Reclaimed)
         else -> name
     }
 }

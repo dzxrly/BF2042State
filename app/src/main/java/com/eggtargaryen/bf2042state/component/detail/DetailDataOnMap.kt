@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.utils.mapNameENGToCHN
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 
 
@@ -90,7 +91,7 @@ fun DetailDataOnMap(
                     ) {
                         Text(
                             modifier = Modifier.weight(0.25f),
-                            text = mapData.mapName ?: "Unknown",
+                            text = mapNameENGToCHN(name = mapData.mapName ?: "Unknown"),
                             color = MaterialTheme.colors.secondary,
                             style = MaterialTheme.typography.body1,
                             textAlign = TextAlign.Start

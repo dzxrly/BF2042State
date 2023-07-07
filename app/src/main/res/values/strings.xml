@@ -132,4 +132,23 @@
     <string name="classes_name_translation_Recon">侦察兵</string>
     <string name="classes_name_translation_Support">支援兵</string>
     <string name="classes_name_translation_Engineer">工程兵</string>
+
+    <string name="map_name_translation_Discarded">废弃之地</string>
+    <string name="map_name_translation_Hourglass">沙漏</string>
+    <string name="map_name_translation_Breakaway">分崩离析</string>
+    <string name="map_name_translation_Kaleidescope">万花筒</string>
+    <string name="map_name_translation_Manifest">货物仓单</string>
+    <string name="map_name_translation_Orbital">航天发射场</string>
+    <string name="map_name_translation_Renewal">涅槃</string>
+    <string name="map_name_translation_Battle_of_the_Bulge">突出部之役</string>
+    <string name="map_name_translation_Arica_Harbor">阿里卡港</string>
+    <string name="map_name_translation_Valparaiso">瓦尔帕莱索</string>
+    <string name="map_name_translation_El_Alamein">阿拉曼</string>
+    <string name="map_name_translation_Noshahr_Canals">诺沙运河</string>
+    <string name="map_name_translation_Caspian_Border">里海边境</string>
+    <string name="map_name_translation_Exposure">曝光</string>
+    <string name="map_name_translation_Stranded">搁浅</string>
+    <string name="map_name_translation_Spearhead">急先锋</string>
+    <string name="map_name_translation_Flashpoint">闪点</string>
+    <string name="map_name_translation_Reclaimed">重生</string>
 </resources>
