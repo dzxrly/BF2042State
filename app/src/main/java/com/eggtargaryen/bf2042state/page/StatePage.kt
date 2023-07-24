@@ -281,6 +281,10 @@ fun PlayerBaseDataCard(
                     ).toString()
                 )
                 BaseDataBadge(
+                    label = stringResource(id = R.string.state_base_data_card_human_kills_ratio),
+                    data = (playerInfo?.humanPrecentage ?: "0.0") + "%"
+                )
+                BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_dpM),
                     data = playerInfo?.damagePerMatch.toString()
                 )

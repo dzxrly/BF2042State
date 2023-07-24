@@ -114,3 +114,19 @@ fun mapNameENGToCHN(name: String): String {
         else -> name
     }
 }
+
+@Keep
+@Composable
+fun modeENGToCHN(name: String): String {
+    return when (name) {
+        "Breakthrough" -> stringResource(id = R.string.mode_name_translation_Breakthrough)
+        "Breakthrough Large" -> stringResource(id = R.string.mode_name_translation_Breakthrough_Large)
+        "Conquest" -> stringResource(id = R.string.mode_name_translation_Conquest)
+        "Conquest Large" -> stringResource(id = R.string.mode_name_translation_Conquest_Large)
+        "Hazard Zone" -> stringResource(id = R.string.mode_name_translation_Hazard_Zone)
+        "Hazard Zone Large" -> stringResource(id = R.string.mode_name_translation_Hazard_Zone_Large)
+        "Rush" -> stringResource(id = R.string.mode_name_translation_Rush)
+        "Custom" -> stringResource(id = R.string.mode_name_translation_Custom)
+        else -> name
+    }
+}

@@ -35,6 +35,7 @@
     <string name="state_base_data_card_hs_rate">爆头率</string>
     <string name="state_base_data_card_acc">准确度</string>
     <string name="state_base_data_card_kills">真实击杀数</string>
+    <string name="state_base_data_card_human_kills_ratio">真实击杀比</string>
     <string name="state_base_data_card_dpM">场均伤害</string>
     <string name="state_base_data_card_kpM">场均击杀</string>
     <string name="state_base_data_card_M">游玩场数</string>
@@ -151,4 +152,13 @@
     <string name="map_name_translation_Spearhead">急先锋</string>
     <string name="map_name_translation_Flashpoint">闪点</string>
     <string name="map_name_translation_Reclaimed">重生</string>
+
+    <string name="mode_name_translation_Breakthrough">突破</string>
+    <string name="mode_name_translation_Breakthrough_Large">突破(大型)</string>
+    <string name="mode_name_translation_Conquest">征服</string>
+    <string name="mode_name_translation_Conquest_Large">征服(大型)</string>
+    <string name="mode_name_translation_Hazard_Zone">危险地带</string>
+    <string name="mode_name_translation_Hazard_Zone_Large">危险地带(大型)</string>
+    <string name="mode_name_translation_Rush">突袭</string>
+    <string name="mode_name_translation_Custom">门户自定义</string>
 </resources>

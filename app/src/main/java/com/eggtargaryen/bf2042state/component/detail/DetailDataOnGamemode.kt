@@ -18,6 +18,7 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.component.TwoColumnBaseBadge
 import com.eggtargaryen.bf2042state.model.Gamemode
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
+import com.eggtargaryen.bf2042state.utils.modeENGToCHN
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import dev.esteki.expandable.Expandable
 
@@ -113,7 +114,7 @@ fun GamemodeDataDetailListItem(
             ) {
                 Text(
                     modifier = Modifier.weight(0.25f),
-                    text = gamemodeItem.gamemodeName ?: "Unknown",
+                    text = modeENGToCHN(name = gamemodeItem.gamemodeName ?: "Unknown"),
                     color = MaterialTheme.colors.secondary,
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Start
