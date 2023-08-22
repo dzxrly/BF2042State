@@ -55,6 +55,32 @@ fun getRealKills(totalKills: Long, humanPrecentage: String): Long {
     return (totalKills * humanPrecentageDouble).toLong()
 }
 
+fun getPlayerNameAndPlatformFromPlayerQueryStr(
+    playerQueryStr: String,
+    spliter: String = "$@$"
+): Pair<String, String> {
+    // check if playerQueryStr is like "playerName$@$platform"
+    if (playerQueryStr.split(spliter).size != 2) {
+        return Pair("", "")
+    }
+    // playerQueryStr is like "playerName$@$platform"
+    val playerName = playerQueryStr.split(spliter)[0]
+    val platform = playerQueryStr.split(spliter)[1]
+    return Pair(playerName, platform)
+}
+
+fun getRealKPM(totalKills: Long, humanPrecentage: String, secondsPlayed: Long): String {
+    val realKills = getRealKills(totalKills, humanPrecentage)
+    // check secondsPlayed is not 0
+    return if (secondsPlayed != 0L) {
+        // keep 2 digits after decimal point
+        (realKills.toDouble() / secondsPlayed.toDouble() * 60.0).toBigDecimal()
+            .setScale(2, BigDecimal.ROUND_HALF_UP).toString()
+    } else {
+        "0.0"
+    }
+}
+
 @Keep
 @Composable
 fun characterNameENGToCHN(name: String): String {

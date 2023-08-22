@@ -76,12 +76,12 @@ fun getPlayerStateByPlayerName(
 // status=7:
 // status=8: 刷枪
 fun postPlayerBFBanStatus(
-    playerName: String
+    playerUID: String
 ): Call {
     val baseApi = RequestBuilder()
     baseApi.urls = "/bfban/checkban"
     baseApi.method = "POST"
-    baseApi.body = "[{\"name\": \"$playerName\"}]".toRequestBody()
+    baseApi.body = "[{\"userId\": \"$playerUID\"}]".toRequestBody()
     baseApi.timeout = BF2042StateBaseApi.timeout.toLong()
     return baseApi.request()
 }

@@ -21,6 +21,7 @@ import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.api.*
 import com.eggtargaryen.bf2042state.component.*
 import com.eggtargaryen.bf2042state.model.*
+import com.eggtargaryen.bf2042state.utils.getPlayerNameAndPlatformFromPlayerQueryStr
 import com.funny.data_saver.core.rememberDataSaverState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -42,6 +43,9 @@ fun LoginPage(
     playerInfoViewModel: PlayerInfoViewModel,
     updateInfoViewModel: UpdateInfoViewModel
 ) {
+    val queryHistorySpliter = "#@#"
+    val playerNameAndPlatformSpliter = "$@$"
+
     val cacheLimitation = 6
     val platformLabelOptions =
         listOf("PC", "Xbox One", "Xbox Series", "PlayStation 4", "PlayStation 5")
@@ -62,7 +66,8 @@ fun LoginPage(
     var enableQueryEnhance by remember { mutableStateOf(false) }
     var queryList by remember { mutableStateOf(PlayerQueryList()) }
     var historyDropdownMenuOpen by remember { mutableStateOf(false) }
-    var queryHistory by rememberDataSaverState("query_history", "")
+    var queryHistory by rememberDataSaverState("query_history_with_platform", "")
+    println(queryHistory.split(queryHistorySpliter).toString())
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -283,25 +288,31 @@ fun LoginPage(
                                                                 playerInfoJson!!
                                                             )
                                                             var queryHistoryList =
-                                                                queryHistory.split("#@#")
+                                                                queryHistory.split(
+                                                                    queryHistorySpliter
+                                                                )
                                                             if (queryHistoryList.size >= cacheLimitation) {
                                                                 queryHistory =
                                                                     queryHistoryList.drop(1)
-                                                                        .joinToString("#@#")
+                                                                        .joinToString(
+                                                                            queryHistorySpliter
+                                                                        )
                                                                 queryHistoryList =
                                                                     queryHistoryList.drop(1)
                                                             }
                                                             if (!queryHistoryList.contains(
-                                                                    playerInfoJson.userName
+                                                                    playerInfoJson.userName + playerNameAndPlatformSpliter + selectedPlatform
                                                                 )
                                                             ) {
                                                                 queryHistory =
                                                                     if (queryHistoryList.isNotEmpty()) {
                                                                         queryHistoryList.plus(
-                                                                            playerInfoJson.userName
+                                                                            playerInfoJson.userName + playerNameAndPlatformSpliter + selectedPlatform
                                                                         )
-                                                                            .joinToString("#@#")
-                                                                    } else playerInfoJson.userName
+                                                                            .joinToString(
+                                                                                queryHistorySpliter
+                                                                            )
+                                                                    } else playerInfoJson.userName + playerNameAndPlatformSpliter + selectedPlatform
                                                             }
                                                             scope.launch { onNavToState() }
                                                         } catch (e: Exception) {
@@ -367,21 +378,22 @@ fun LoginPage(
                                                     playerInfoJson!!
                                                 )
                                                 var queryHistoryList = if (queryHistory != "") {
-                                                    queryHistory.split("#@#")
+                                                    queryHistory.split(queryHistorySpliter)
                                                 } else {
                                                     listOf<String>()
                                                 }
                                                 if (queryHistoryList.size >= cacheLimitation) {
                                                     queryHistory =
-                                                        queryHistoryList.drop(1).joinToString("#@#")
+                                                        queryHistoryList.drop(1)
+                                                            .joinToString(queryHistorySpliter)
                                                     queryHistoryList = queryHistoryList.drop(1)
                                                 }
-                                                if (!queryHistoryList.contains(playerInfoJson.userName)) {
+                                                if (!queryHistoryList.contains(playerInfoJson.userName + playerNameAndPlatformSpliter + selectedPlatform)) {
                                                     queryHistory =
                                                         if (queryHistoryList.isNotEmpty()) {
-                                                            queryHistoryList.plus(playerInfoJson.userName)
-                                                                .joinToString("#@#")
-                                                        } else playerInfoJson.userName
+                                                            queryHistoryList.plus(playerInfoJson.userName + playerNameAndPlatformSpliter + selectedPlatform)
+                                                                .joinToString(queryHistorySpliter)
+                                                        } else playerInfoJson.userName + playerNameAndPlatformSpliter + selectedPlatform
                                                 }
                                                 scope.launch { onNavToState() }
                                             } catch (e: Exception) {
@@ -500,19 +512,47 @@ fun LoginPage(
                                     .background(MaterialTheme.colors.background),
                                 expanded = historyDropdownMenuOpen,
                                 onDismissRequest = { historyDropdownMenuOpen = false }) {
-                                if (queryHistory.split("#@#").isEmpty()) {
+                                if (queryHistory.split(queryHistorySpliter).isEmpty()) {
                                     Text(
                                         modifier = Modifier.padding(16.dp),
                                         text = stringResource(id = R.string.login_query_history_is_empty)
                                     )
                                 } else {
-                                    queryHistory.split("#@#").forEach { history ->
+                                    queryHistory.split(queryHistorySpliter).forEach { history ->
                                         DropdownMenuItem(
                                             onClick = {
-                                                username = history
+                                                username =
+                                                    getPlayerNameAndPlatformFromPlayerQueryStr(
+                                                        history,
+                                                        playerNameAndPlatformSpliter
+                                                    ).first
+                                                selectedPlatform =
+                                                    getPlayerNameAndPlatformFromPlayerQueryStr(
+                                                        history,
+                                                        playerNameAndPlatformSpliter
+                                                    ).second
+                                                // set selectedPlatformText if index != -1
+                                                selectedPlatformText =
+                                                    if (platformValOptions.indexOf(
+                                                            selectedPlatform
+                                                        ) != -1
+                                                    ) {
+                                                        platformLabelOptions[platformValOptions.indexOf(
+                                                            selectedPlatform
+                                                        )]
+                                                    } else {
+                                                        ""
+                                                    }
                                                 historyDropdownMenuOpen = false
                                             }
-                                        ) { Text(text = history) }
+                                        ) {
+                                            Text(
+                                                text = getPlayerNameAndPlatformFromPlayerQueryStr(
+                                                    history,
+                                                    playerNameAndPlatformSpliter
+                                                ).first
+                                            )
+                                        }
                                     }
                                 }
                             }

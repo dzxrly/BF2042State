@@ -48,7 +48,7 @@ fun labelToString(label: Int): String {
 fun BFBanInfo(
     playerInfoViewModel: PlayerInfoViewModel,
 ) {
-    val playerName = playerInfoViewModel.getPlayerInfo()?.userName ?: ""
+    val playerUID = playerInfoViewModel.getPlayerInfo()?.userId.toString() ?: ""
     val localUriHandler = LocalUriHandler.current
     var label by remember {
         mutableStateOf(-3)
@@ -60,8 +60,8 @@ fun BFBanInfo(
         mutableStateOf("#")
     }
 
-    if (playerName.isNotEmpty() && playerName != "") {
-        postPlayerBFBanStatus(playerName)
+    if (playerUID.isNotEmpty() && playerUID != "") {
+        postPlayerBFBanStatus(playerUID)
             .enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
                     var banStatus = response.body?.string()
@@ -75,7 +75,7 @@ fun BFBanInfo(
                                 val banStatusAdapter =
                                     moshi.adapter(CheatInfo::class.java)
                                 val banStatusJson = banStatusAdapter.fromJson(banStatus)
-                                println("${banStatusJson?.hacker}, ${banStatusJson?.status}")
+//                                println("${banStatusJson?.hacker}, ${banStatusJson?.status}")
                                 if (banStatusJson?.hacker == true) {
                                     banUrl.value = banStatusJson.url!!
                                     banStatusJson.status!!

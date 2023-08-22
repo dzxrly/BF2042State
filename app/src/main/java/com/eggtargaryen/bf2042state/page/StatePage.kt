@@ -26,6 +26,7 @@ import com.eggtargaryen.bf2042state.component.*
 import com.eggtargaryen.bf2042state.component.detail.*
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
 import com.eggtargaryen.bf2042state.utils.characterNameENGToCHN
+import com.eggtargaryen.bf2042state.utils.getRealKPM
 import com.eggtargaryen.bf2042state.utils.getRealKills
 import com.eggtargaryen.bf2042state.utils.secondsToHours
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
@@ -254,8 +255,12 @@ fun PlayerBaseDataCard(
                     data = playerInfo?.infantryKillDeath.toString()
                 )
                 BaseDataBadge(
-                    label = stringResource(id = R.string.state_base_data_card_kpm),
-                    data = playerInfo?.killsPerMinute.toString()
+                    label = stringResource(id = R.string.state_base_data_card_real_kpm),
+                    data = getRealKPM(
+                        totalKills = playerInfo?.kills ?: 0L,
+                        humanPrecentage = playerInfo?.humanPrecentage ?: "0.0%",
+                        secondsPlayed = playerInfo?.secondsPlayed ?: 0L
+                    )
                 )
                 BaseDataBadge(
                     label = stringResource(id = R.string.state_base_data_card_dpm),

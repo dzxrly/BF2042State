@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.eggtargaryen.bf2042state.R
 import com.eggtargaryen.bf2042state.model.PlayerInfoViewModel
-import com.eggtargaryen.bf2042state.utils.getRealKills
 
 
 @Composable
@@ -70,11 +69,8 @@ fun DetailDataOnFoot(
         )
         Divider()
         DetailRow(
-            label = stringResource(id = R.string.state_base_data_card_kills),
-            data = getRealKills(
-                playerInfo?.kills ?: 0L,
-                playerInfo?.humanPrecentage ?: "0.0%"
-            ).toString()
+            label = stringResource(id = R.string.state_detail_data_on_foot_kpm),
+            data = playerInfo?.killsPerMinute.toString() ?: "0.0"
         )
         Divider()
         DetailRow(
