@@ -39,28 +39,30 @@ fun AppNavigation(
         navController = navController,
         startDestination = startDestination,
         enterTransition = {
-            slideIntoContainer(
-                AnimatedContentScope.SlideDirection.Left,
-                animationSpec = tween(durationMillis = durationMillis, easing = easing)
-            )
+            when (initialState.destination.route) {
+                Destinations.LOGIN -> slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(durationMillis = durationMillis, easing = easing)
+                )
+
+                else -> slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(durationMillis = durationMillis, easing = easing)
+                )
+            }
         },
         exitTransition = {
-            slideOutOfContainer(
-                AnimatedContentScope.SlideDirection.Left,
-                animationSpec = tween(durationMillis = durationMillis, easing = easing)
-            )
-        },
-        popEnterTransition = {
-            slideIntoContainer(
-                AnimatedContentScope.SlideDirection.Right,
-                animationSpec = tween(durationMillis = durationMillis, easing = easing)
-            )
-        },
-        popExitTransition = {
-            slideOutOfContainer(
-                AnimatedContentScope.SlideDirection.Right,
-                animationSpec = tween(durationMillis = durationMillis, easing = easing)
-            )
+            when (targetState.destination.route) {
+                Destinations.LOGIN -> slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(durationMillis = durationMillis, easing = easing)
+                )
+
+                else -> slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(durationMillis = durationMillis, easing = easing)
+                )
+            }
         }
     ) {
         composable(Destinations.LOGIN) {
