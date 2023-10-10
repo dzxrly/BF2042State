@@ -13,6 +13,10 @@ Compose，代码写得很烂，欢迎各位大佬指点。
 
 [最新版下载](https://github.com/dzxrly/BF2042State/releases/latest)
 
+## 请我喝一杯咖啡
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F0PZH7X)
+
 ---
 
 Powered by Jetpack Compose

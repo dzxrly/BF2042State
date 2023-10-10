@@ -12,7 +12,7 @@ android {
         applicationId "com.eggtargaryen.bf2042state"
         minSdk 26
         targetSdk 33
-        versionCode 21
+        versionCode 22
         versionName "1.1.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
