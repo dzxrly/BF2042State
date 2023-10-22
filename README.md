@@ -1,5 +1,7 @@
 # 战地2042战绩查询助手
 
+**!!该项目已停止更行，新项目迁移至[战地2042战绩查询助手2.0](https://github.com/dzxrly/BF2042State2.0) !!**
+
 ![最新版本号](https://img.shields.io/github/v/release/dzxrly/BF2042State?style=for-the-badge) ![MIT License](https://img.shields.io/github/license/dzxrly/BF2042State?style=for-the-badge) ![Downloads](https://img.shields.io/github/downloads/dzxrly/BF2042State/total?style=for-the-badge)
 
 一个简陋的战地2042战绩查询应用，由Egg Targaryen (橘子ID: Xx__Koraidon__xX) 开发。初学Kotlin与Jetpack
